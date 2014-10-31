@@ -56,7 +56,11 @@ OpenGLContext::OpenGLContext():
     m_pChildWindow(NULL),
     mbInitialized(false),
     mnRefCount(1),
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
+    mbRequestLegacyContext(true),
+#else
     mbRequestLegacyContext(false),
+#endif
     mbUseDoubleBufferedRendering(true),
     mbRequestVirtualDevice(false),
     mnFramebufferCount(0),
@@ -1078,7 +1082,11 @@ bool OpenGLContext::initWindow()
 {
     if( !m_pChildWindow )
     {
-        SystemWindowData winData = generateWinData(mpWindow, false);
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
+        SystemWindowData winData = generateWinData(mpWindow, /* bLegacy */ true);
+#else
+        SystemWindowData winData = generateWinData(mpWindow, /* bLegacy */ false);
+#endif
         m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
         m_xChildWindowGC.reset(m_pChildWindow);
     }
