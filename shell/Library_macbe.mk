@@ -18,6 +18,10 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,macbe1,\
 	SystemConfiguration \
 ))
 
+$(eval $(call gb_Library_add_libs,macbe1,\
+	$(if $(filter TRUE,$(COM_GCC_IS_CLANG)),-lobjc,-lobjc-gnu -L/usr/GNUstep/System/Library/Libraries -lgnustep-base -lgnustep-gui) \
+))
+
 $(eval $(call gb_Library_use_libraries,macbe1,\
 	cppu \
 	cppuhelper \

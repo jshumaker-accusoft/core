@@ -35,6 +35,10 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaQuickTime,\
 	QTKit \
 ))
 
+$(eval $(call gb_Library_add_libs,avmediaQuickTime,\
+	$(if $(filter TRUE,$(COM_GCC_IS_CLANG)),-lobjc,-lobjc-gnu -L/usr/GNUstep/System/Library/Libraries -lgnustep-base -lgnustep-gui) \
+))
+
 $(eval $(call gb_Library_add_objcxxobjects,avmediaQuickTime,\
 	avmedia/source/quicktime/framegrabber \
 	avmedia/source/quicktime/manager \

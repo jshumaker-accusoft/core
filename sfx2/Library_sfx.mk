@@ -319,7 +319,7 @@ $(eval $(call gb_Library_add_objcxxobjects,sfx,\
     sfx2/source/appl/shutdowniconaqua \
 ))
 $(eval $(call gb_Library_add_libs,sfx,\
-    -lobjc \
+    $(if $(filter TRUE,$(COM_GCC_IS_CLANG)),-lobjc,-lobjc-gnu -L/usr/GNUstep/System/Library/Libraries -lgnustep-base -lgnustep-gui) \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,sfx,\
     Cocoa \

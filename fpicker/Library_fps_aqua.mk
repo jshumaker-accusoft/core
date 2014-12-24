@@ -44,4 +44,8 @@ $(eval $(call gb_Library_add_objcxxobjects,fps_aqua,\
 	fpicker/source/aqua/SalAquaPicker \
 ))
 
+$(eval $(call gb_Library_add_libs,fps_aqua,\
+	$(if $(filter TRUE,$(COM_GCC_IS_CLANG)),-lobjc,-lobjc-gnu -L/usr/GNUstep/System/Library/Libraries -lgnustep-base -lgnustep-gui) \
+))
+
 # vim: set noet sw=4 ts=4:
