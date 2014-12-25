@@ -201,7 +201,7 @@ endif
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
-	OOoSpotlightImporter \
+	$(if $(filter-out 1050,$(MACOSX_SDK_VERSION)),OOoSpotlightImporter) \
 ))
 
 endif
