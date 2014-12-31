@@ -348,6 +348,8 @@ class VclBuilder;
 class ImplDockingWindowWrapper;
 class ImplPopupFloatWin;
 class MenuFloatingWindow;
+class LifecycleTest;
+
 namespace svt { class PopupWindowControllerImpl; }
 
 struct WindowResHeader
@@ -377,6 +379,7 @@ class VCL_DLLPUBLIC Window : public ::OutputDevice, public Resource
     friend class ::ImplBorderWindow;
     friend class ::VclBuilder;
     friend class ::PaintHelper;
+    friend class ::LifecycleTest;
 
     // TODO: improve missing functionality
     // only required because of SetFloatingMode()
