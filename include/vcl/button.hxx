@@ -177,7 +177,7 @@ public:
     void            SetSymbolAlign( SymbolAlign eAlign );
 
     void            SetDropDown( sal_uInt16 nStyle );
-    sal_uInt16          GetDropDown() const { return mnDDStyle; }
+    sal_uInt16      GetDropDown() const { return mnDDStyle; }
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }
