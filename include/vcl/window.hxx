@@ -118,7 +118,7 @@ namespace vcl {
 
 namespace svt { class PopupWindowControllerImpl; }
 
-template<class T> class VclReference;
+template<class T> class VclPtr;
 
 
 // - WindowTypes -
@@ -487,7 +487,7 @@ public:
 
 private:
     template<typename T> friend class ::rtl::Reference;
-    template<typename T> friend class ::VclReference;
+    template<typename T> friend class ::VclPtr;
 
     inline void acquire() const
     {
