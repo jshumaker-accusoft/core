@@ -2027,7 +2027,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                         if (sInternalChild.startsWith("vbox") || sInternalChild.startsWith("messagedialog-vbox"))
                         {
                             if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
-                                pBoxParent->set_content_area(static_cast<VclBox*>(pCurrentChild));
+                                pBoxParent->set_content_area(VclPtr<VclBox>(static_cast<VclBox*>(pCurrentChild))); // FIXME-VCLPTR
                         }
                         else if (sInternalChild.startsWith("action_area") || sInternalChild.startsWith("messagedialog-action_area"))
                         {
@@ -2035,7 +2035,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                             assert(pContentArea && pContentArea->GetType() == WINDOW_CONTAINER);
                             if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : NULL))
                             {
-                                pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild));
+                                pBoxParent->set_action_area(VclPtr<VclButtonBox>(static_cast<VclButtonBox*>(pCurrentChild))); // FIXME-VCLPTR
                             }
                         }
 
