@@ -58,6 +58,7 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
         bool bFound = false;
         if (typeName == "class rtl::OUString" ||
             typeName == "class rtl::OString" ||
+            typeName.find("class VclPtr") == 0 ||
             typeName.find("class com::sun::star::uno::Sequence") == 0) {
             bFound = true;
         }
@@ -75,7 +76,7 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
         if (bFound) {
             report(
                 DiagnosticsEngine::Warning,
-                "passing " + typeName + " by value, rather pass by reference .e.g. 'const " + typeName + "&'",
+                "passing " + typeName + " by value, rather pass by const reference .e.g. 'const " + typeName + "&'",
                 pvDecl->getSourceRange().getBegin())
               << pvDecl->getSourceRange();
         }
