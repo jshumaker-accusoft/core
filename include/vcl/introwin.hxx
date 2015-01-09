@@ -20,20 +20,17 @@
 #ifndef INCLUDED_VCL_INTROWIN_HXX
 #define INCLUDED_VCL_INTROWIN_HXX
 
-#include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/wrkwin.hxx>
 
+/// This class just provides an API to set the intro-window to
+/// our internal structures so we can special-case it.
 class VCL_DLLPUBLIC IntroWindow : public WorkWindow
 {
-private:
-    SAL_DLLPRIVATE void ImplInitIntroWindowData();
-
 public:
                  IntroWindow();
     virtual      ~IntroWindow();
     virtual void dispose() SAL_OVERRIDE;
-
 };
 
 #endif // INCLUDED_VCL_INTROWIN_HXX

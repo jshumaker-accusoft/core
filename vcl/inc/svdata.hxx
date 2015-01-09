@@ -35,6 +35,7 @@
 #include "vcl/keycod.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/vclevent.hxx"
+#include "vcl/vclptr.hxx"
 
 #include "unotools/options.hxx"
 
@@ -325,7 +326,7 @@ struct ImplSVData
     ImplSVHelpData          maHelpData;                     // indepen data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper;
-    vcl::Window*            mpIntroWindow;                  // the splash screen
+    VclPtr<vcl::Window>     mpIntroWindow;                  // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
     bool                    mbIsTestTool;

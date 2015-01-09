@@ -114,7 +114,6 @@ public:
 
     // workwindow
     virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
-
 };
 
 SplashScreen::SplashScreen()
@@ -157,7 +156,6 @@ SplashScreen::~SplashScreen()
     Application::RemoveEventListener(
         LINK( this, SplashScreen, AppEventListenerHdl ) );
     Hide();
-
 }
 
 void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
