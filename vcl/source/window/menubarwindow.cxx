@@ -165,8 +165,19 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
 
 MenuBarWindow::~MenuBarWindow()
 {
+    dispose();
+}
+
+void MenuBarWindow::dispose()
+{
     aCloseBtn->RemoveEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
     RemoveEventListener(LINK(this, MenuBarWindow, ShowHideListener));
+
+    aCloseBtn.disposeAndClear();
+    aFloatBtn.disposeAndClear();
+    aHideBtn.disposeAndClear();
+
+    Window::dispose();
 }
 
 void MenuBarWindow::SetMenu( MenuBar* pMen )
@@ -1059,15 +1070,6 @@ void MenuBarWindow::GetFocus()
         ChangeHighlightItem( 0, false );
     }
 }
-
-void MenuBarWindow::dispose()
-{
-    aCloseBtn.disposeAndClear();
-    aFloatBtn.disposeAndClear();
-    aHideBtn.disposeAndClear();
-    Window::dispose();
-}
-
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > MenuBarWindow::CreateAccessible()
 {

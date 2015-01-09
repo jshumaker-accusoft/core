@@ -106,9 +106,16 @@ void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStri
 
 SystemWindow::~SystemWindow()
 {
+    dispose();
+}
+
+void SystemWindow::dispose()
+{
     maLayoutIdle.Stop();
     delete mpImplData;
     mpImplData = NULL;
+
+    Window::dispose();
 }
 
 bool SystemWindow::Notify( NotifyEvent& rNEvt )

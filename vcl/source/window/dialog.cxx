@@ -541,6 +541,8 @@ void Dialog::settingOptimalLayoutSize(VclBox *pBox)
 
 Dialog::~Dialog()
 {
+    dispose();
+
     delete mpDialogImpl;
     mpDialogImpl = NULL;
 }
