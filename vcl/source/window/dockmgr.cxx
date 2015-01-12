@@ -56,6 +56,7 @@ public:
     ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
     virtual ~ImplDockFloatWin2();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Move() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -96,8 +97,14 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
 {
+    dispose();
+}
+
+void ImplDockFloatWin2::dispose()
+{
     if( mnLastUserEvent )
         Application::RemoveUserEvent( mnLastUserEvent );
+    FloatingWindow::dispose();
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
@@ -479,6 +486,7 @@ private:
 public:
     ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
     virtual ~ImplPopupFloatWin();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -515,7 +523,13 @@ ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWra
 
 ImplPopupFloatWin::~ImplPopupFloatWin()
 {
+    dispose();
+}
+
+void ImplPopupFloatWin::dispose()
+{
     mpDockingWin = NULL;
+    FloatingWindow::dispose();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ImplPopupFloatWin::CreateAccessible()

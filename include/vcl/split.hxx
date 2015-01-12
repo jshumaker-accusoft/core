@@ -28,7 +28,7 @@
 class VCL_DLLPUBLIC Splitter : public vcl::Window
 {
 private:
-    vcl::Window*             mpRefWin;
+    vcl::Window*        mpRefWin;
     long                mnSplitPos;
     long                mnLastSplitPos;
     long                mnStartSplitPos;
@@ -64,6 +64,7 @@ protected:
 public:
     explicit            Splitter( vcl::Window* pParent, WinBits nStyle = WB_VSCROLL );
     virtual             ~Splitter();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        StartSplit();
     virtual void        EndSplit();

@@ -287,7 +287,8 @@ protected:
 public:
                         ToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
                         ToolBox( vcl::Window* pParent, const ResId& rResId );
-                        virtual ~ToolBox();
+    virtual             ~ToolBox();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        Click();
     virtual void        DoubleClick();

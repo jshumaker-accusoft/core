@@ -126,7 +126,8 @@ private:
     SAL_DLLPRIVATE      SplitWindow & operator= (const SplitWindow &);
 public:
                         SplitWindow( vcl::Window* pParent, WinBits nStyle = 0 );
-                        virtual ~SplitWindow();
+    virtual             ~SplitWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        StartSplit();
     virtual void        Split();

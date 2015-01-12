@@ -93,8 +93,14 @@ RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
 
 RTSDialog::~RTSDialog()
 {
+    dispose();
+}
+
+void RTSDialog::dispose()
+{
     delete m_pPaperPage;
     delete m_pDevicePage;
+    TabDialog::dispose();
 }
 
 IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
@@ -185,10 +191,6 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
     m_pSlotBox->SetEntryData( nPos, NULL );
 
     update();
-}
-
-RTSPaperPage::~RTSPaperPage()
-{
 }
 
 void RTSPaperPage::update()
@@ -354,10 +356,6 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
             }
         }
     }
-}
-
-RTSDevicePage::~RTSDevicePage()
-{
 }
 
 void RTSDevicePage::update()

@@ -48,7 +48,8 @@ private:
 
 public:
                     TextWindow( vcl::Window* pParent );
-                    virtual ~TextWindow();
+    virtual         ~TextWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
     ExtTextView*    GetTextView() const { return mpExtTextView; }
@@ -731,8 +732,14 @@ TextWindow::TextWindow( vcl::Window* pParent ) : Window( pParent )
 
 TextWindow::~TextWindow()
 {
+    dispose();
+}
+
+void TextWindow::dispose()
+{
     delete mpExtTextView;
     delete mpExtTextEngine;
+    Window::dispose();
 }
 
 void TextWindow::MouseMove( const MouseEvent& rMEvt )

@@ -1207,7 +1207,12 @@ public:
     }
     virtual ~DemoWin()
     {
+        dispose();
+    }
+    virtual void dispose() SAL_OVERRIDE
+    {
         mrRenderer.removeInvalidate(this);
+        WorkWindow::dispose();
     }
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE
     {
@@ -1273,9 +1278,6 @@ public:
         mpBox->Show();
 
         Show();
-    }
-    virtual ~DemoWidgets()
-    {
     }
     virtual void Paint(const Rectangle&) SAL_OVERRIDE
     {
