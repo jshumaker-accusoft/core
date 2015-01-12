@@ -1559,6 +1559,11 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
 
 SvTreeListBox::~SvTreeListBox()
 {
+    dispose();
+}
+
+void SvTreeListBox::dispose()
+{
 
     pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
     delete pImp;
@@ -1582,6 +1587,7 @@ SvTreeListBox::~SvTreeListBox()
     if( this == pDDTarget )
         pDDTarget = 0;
     delete mpImpl;
+    Control::dispose();
 }
 
 void SvTreeListBox::SetExtendedWinBits( ExtendedWinBits _nBits )
@@ -2255,18 +2261,18 @@ void SvTreeListBox::ShowTargetEmphasis( SvTreeListEntry* pEntry, bool /*bShow*/ 
 
 void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
 {
-    if( !nDeltaEntries || !pImp->aVerSBar.IsVisible() )
+    if( !nDeltaEntries || !pImp->aVerSBar->IsVisible() )
         return;
 
-    long nThumb = pImp->aVerSBar.GetThumbPos();
-    long nMax = pImp->aVerSBar.GetRange().Max();
+    long nThumb = pImp->aVerSBar->GetThumbPos();
+    long nMax = pImp->aVerSBar->GetRange().Max();
 
     NotifyBeginScroll();
     if( nDeltaEntries < 0 )
     {
         // move window up
         nDeltaEntries *= -1;
-        long nVis = pImp->aVerSBar.GetVisibleSize();
+        long nVis = pImp->aVerSBar->GetVisibleSize();
         long nTemp = nThumb + nVis;
         if( nDeltaEntries > (nMax - nTemp) )
             nDeltaEntries = (short)(nMax - nTemp);
@@ -3712,12 +3718,12 @@ void SvTreeListBox::RepaintScrollBars() const
 
 ScrollBar *SvTreeListBox::GetVScroll()
 {
-    return &((SvTreeListBox*)this)->pImp->aVerSBar;
+    return pImp->aVerSBar.get();
 }
 
 ScrollBar *SvTreeListBox::GetHScroll()
 {
-    return &((SvTreeListBox*)this)->pImp->aHorSBar;
+    return pImp->aHorSBar.get();
 }
 
 void SvTreeListBox::EnableAsyncDrag( bool b )

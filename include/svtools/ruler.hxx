@@ -711,6 +711,7 @@ protected:
 public:
             Ruler( vcl::Window* pParent, WinBits nWinStyle = WB_STDRULER );
     virtual ~Ruler();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

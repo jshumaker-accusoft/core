@@ -28,8 +28,8 @@ class SVT_DLLPUBLIC PlaceEditDialog : public ModalDialog
 {
 private :
 
-    Edit*      m_pEDServerName;
-    ListBox*   m_pLBServerType;
+    Edit*         m_pEDServerName;
+    ListBox*      m_pLBServerType;
     boost::shared_ptr< DetailsContainer > m_pCurrentDetails;
 
     Edit*         m_pEDUsername;
@@ -50,12 +50,11 @@ public :
 
      PlaceEditDialog( vcl::Window* pParent);
      PlaceEditDialog(vcl::Window* pParent, const boost::shared_ptr<Place> &pPlace );
-     virtual ~PlaceEditDialog();
 
      // Returns a place instance with given information
      boost::shared_ptr<Place> GetPlace();
 
-    OUString GetServerName() { return m_pEDServerName->GetText(); }
+     OUString GetServerName() { return m_pEDServerName->GetText(); }
      OUString GetServerUrl();
 
 private:

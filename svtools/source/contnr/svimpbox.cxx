@@ -47,9 +47,9 @@ Image*  SvImpLBox::s_pDefExpanded       = NULL;
 sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle)
-    : aVerSBar(pLBView, WB_DRAG | WB_VSCROLL)
-    , aHorSBar(pLBView, WB_DRAG | WB_HSCROLL)
-    , aScrBarBox(pLBView)
+    : aVerSBar(new ScrollBar(pLBView, WB_DRAG | WB_VSCROLL))
+    , aHorSBar(new ScrollBar(pLBView, WB_DRAG | WB_HSCROLL))
+    , aScrBarBox(new ScrollBarBox(pLBView))
     , aOutputSize(0, 0)
     , aSelEng(pLBView, (FunctionSet*)0)
     , aFctSet(this, &aSelEng, pLBView)
@@ -67,18 +67,18 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     SetSelectionMode( SINGLE_SELECTION );
     SetDragDropMode( 0 );
 
-    aVerSBar.SetScrollHdl( LINK( this, SvImpLBox, ScrollUpDownHdl ) );
-    aHorSBar.SetScrollHdl( LINK( this, SvImpLBox, ScrollLeftRightHdl ) );
-    aHorSBar.SetEndScrollHdl( LINK( this, SvImpLBox, EndScrollHdl ) );
-    aVerSBar.SetEndScrollHdl( LINK( this, SvImpLBox, EndScrollHdl ) );
-    aVerSBar.SetRange( Range(0,0) );
-    aVerSBar.Hide();
-    aHorSBar.SetRange( Range(0,0) );
-    aHorSBar.SetPageSize( 24 ); // pixels
-    aHorSBar.SetLineSize( 8 ); // pixels
+    aVerSBar->SetScrollHdl( LINK( this, SvImpLBox, ScrollUpDownHdl ) );
+    aHorSBar->SetScrollHdl( LINK( this, SvImpLBox, ScrollLeftRightHdl ) );
+    aHorSBar->SetEndScrollHdl( LINK( this, SvImpLBox, EndScrollHdl ) );
+    aVerSBar->SetEndScrollHdl( LINK( this, SvImpLBox, EndScrollHdl ) );
+    aVerSBar->SetRange( Range(0,0) );
+    aVerSBar->Hide();
+    aHorSBar->SetRange( Range(0,0) );
+    aHorSBar->SetPageSize( 24 ); // pixels
+    aHorSBar->SetLineSize( 8 ); // pixels
 
-    nHorSBarHeight = (short)aHorSBar.GetSizePixel().Height();
-    nVerSBarWidth = (short)aVerSBar.GetSizePixel().Width();
+    nHorSBarHeight = (short)aHorSBar->GetSizePixel().Height();
+    nVerSBarWidth = (short)aVerSBar->GetSizePixel().Width();
 
     pStartEntry = 0;
     pCursor             = 0;
@@ -124,6 +124,9 @@ SvImpLBox::~SvImpLBox()
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);
     }
+    aVerSBar.disposeAndClear();
+    aHorSBar.disposeAndClear();
+    aScrBarBox.disposeAndClear();
 }
 
 void SvImpLBox::UpdateStringSorter()
@@ -268,25 +271,25 @@ void SvImpLBox::Clear()
             pView->HideFocus();
         pCursor = 0;
     }
-    aVerSBar.Hide();
-    aVerSBar.SetThumbPos( 0 );
+    aVerSBar->Hide();
+    aVerSBar->SetThumbPos( 0 );
     Range aRange( 0, 0 );
-    aVerSBar.SetRange( aRange );
+    aVerSBar->SetRange( aRange );
     aOutputSize = pView->Control::GetOutputSizePixel();
     nFlags &= ~(F_VER_SBARSIZE_WITH_HBAR | F_HOR_SBARSIZE_WITH_VBAR );
-    aHorSBar.Hide();
-    aHorSBar.SetThumbPos( 0 );
+    aHorSBar->Hide();
+    aHorSBar->SetThumbPos( 0 );
     MapMode aMapMode( pView->GetMapMode());
     aMapMode.SetOrigin( Point(0,0) );
     pView->Control::SetMapMode( aMapMode );
-    aHorSBar.SetRange( aRange );
-    aHorSBar.SetSizePixel(Size(aOutputSize.Width(),nHorSBarHeight));
+    aHorSBar->SetRange( aRange );
+    aHorSBar->SetSizePixel(Size(aOutputSize.Width(),nHorSBarHeight));
     pView->SetClipRegion();
     if( GetUpdateMode() )
         pView->Invalidate( GetVisibleArea() );
     nFlags |= F_FILLING;
-    if( !aHorSBar.IsVisible() && !aVerSBar.IsVisible() )
-        aScrBarBox.Hide();
+    if( !aHorSBar->IsVisible() && !aVerSBar->IsVisible() )
+        aScrBarBox->Hide();
 
     aContextBmpWidthVector.clear();
 
@@ -301,7 +304,7 @@ IMPL_LINK_NOARG_INLINE_START(SvImpLBox, EndScrollHdl)
 {
     if( nFlags & F_ENDSCROLL_SET_VIS_SIZE )
     {
-        aVerSBar.SetVisibleSize( nNextVerVisSize );
+        aVerSBar->SetVisibleSize( nNextVerVisSize );
         nFlags &= ~F_ENDSCROLL_SET_VIS_SIZE;
     }
     EndScroll();
@@ -474,16 +477,16 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
 
 void SvImpLBox::KeyUp( bool bPageUp, bool bNotifyScroll )
 {
-    if( !aVerSBar.IsVisible() )
+    if( !aVerSBar->IsVisible() )
         return;
 
     long nDelta;
     if( bPageUp )
-        nDelta = aVerSBar.GetPageSize();
+        nDelta = aVerSBar->GetPageSize();
     else
         nDelta = 1;
 
-    long nThumbPos = aVerSBar.GetThumbPos();
+    long nThumbPos = aVerSBar->GetThumbPos();
 
     if( nThumbPos < nDelta )
         nDelta = nThumbPos;
@@ -495,7 +498,7 @@ void SvImpLBox::KeyUp( bool bPageUp, bool bNotifyScroll )
     if( bNotifyScroll )
         BeginScroll();
 
-    aVerSBar.SetThumbPos( nThumbPos - nDelta );
+    aVerSBar->SetThumbPos( nThumbPos - nDelta );
     if( bPageUp )
         PageUp( (short)nDelta );
     else
@@ -508,18 +511,18 @@ void SvImpLBox::KeyUp( bool bPageUp, bool bNotifyScroll )
 
 void SvImpLBox::KeyDown( bool bPageDown, bool bNotifyScroll )
 {
-    if( !aVerSBar.IsVisible() )
+    if( !aVerSBar->IsVisible() )
         return;
 
     long nDelta;
     if( bPageDown )
-        nDelta = aVerSBar.GetPageSize();
+        nDelta = aVerSBar->GetPageSize();
     else
         nDelta = 1;
 
-    long nThumbPos = aVerSBar.GetThumbPos();
-    long nVisibleSize = aVerSBar.GetVisibleSize();
-    long nRange = aVerSBar.GetRange().Len();
+    long nThumbPos = aVerSBar->GetThumbPos();
+    long nVisibleSize = aVerSBar->GetVisibleSize();
+    long nRange = aVerSBar->GetRange().Len();
 
     long nTmp = nThumbPos+nVisibleSize;
     while( (nDelta > 0) && (nTmp+nDelta) >= nRange )
@@ -532,7 +535,7 @@ void SvImpLBox::KeyDown( bool bPageDown, bool bNotifyScroll )
     if( bNotifyScroll )
         BeginScroll();
 
-    aVerSBar.SetThumbPos( nThumbPos+nDelta );
+    aVerSBar->SetThumbPos( nThumbPos+nDelta );
     if( bPageDown )
         PageDown( (short)nDelta );
     else
@@ -713,7 +716,7 @@ void SvImpLBox::UpdateAll(
 {
     if( bUpdateVerScrollBar )
         FindMostRight(0);
-    aVerSBar.SetRange( Range(0, pView->GetVisibleCount()-1 ) );
+    aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1 ) );
     SyncVerThumb();
     FillView();
     ShowVerSBar();
@@ -753,7 +756,7 @@ void SvImpLBox::KeyLeftRight( long nDelta )
     ShowCursor( false );
 
     // neuen Origin berechnen
-    long nPos = aHorSBar.GetThumbPos();
+    long nPos = aHorSBar->GetThumbPos();
     Point aOrigin( -nPos, 0 );
 
     MapMode aMapMode( pView->GetMapMode() );
@@ -904,7 +907,7 @@ void SvImpLBox::Paint( const Rectangle& rRect )
         {
             ShowCursor( false );
             pStartEntry = pView->First();
-            aVerSBar.SetThumbPos( 0 );
+            aVerSBar->SetThumbPos( 0 );
             StopUserEvent();
             ShowCursor( true );
             nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent), reinterpret_cast<void*>(1));
@@ -1009,7 +1012,7 @@ void SvImpLBox::MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop )
     pStartEntry = pEntry;
     ShowCursor( false );
     FillView();
-    aVerSBar.SetThumbPos( (long)(pView->GetVisiblePos( pStartEntry )) );
+    aVerSBar->SetThumbPos( (long)(pView->GetVisiblePos( pStartEntry )) );
     ShowCursor( true );
     pView->Invalidate();
 }
@@ -1036,7 +1039,7 @@ void SvImpLBox::ScrollToAbsPos( long nPos )
     {
         pStartEntry = pEntry;
         ShowCursor( false );
-        aVerSBar.SetThumbPos( nPos );
+        aVerSBar->SetThumbPos( nPos );
         ShowCursor( true );
         if (GetUpdateMode())
             pView->Invalidate();
@@ -1174,12 +1177,12 @@ void SvImpLBox::PositionScrollBars( Size& rSize, sal_uInt16 nMask )
 
     aVerSize.Height() += 2 * nOverlap;
     Point aVerPos( rSize.Width() - aVerSize.Width() + nOverlap, -nOverlap );
-    aVerSBar.SetPosSizePixel( aVerPos, aVerSize );
+    aVerSBar->SetPosSizePixel( aVerPos, aVerSize );
 
     aHorSize.Width() += 2 * nOverlap;
     Point aHorPos( -nOverlap, rSize.Height() - aHorSize.Height() + nOverlap );
 
-    aHorSBar.SetPosSizePixel( aHorPos, aHorSize );
+    aHorSBar->SetPosSizePixel( aHorPos, aHorSize );
 
     if( nMask & 0x0001 )
         rSize.Width() = aVerPos.X();
@@ -1187,9 +1190,9 @@ void SvImpLBox::PositionScrollBars( Size& rSize, sal_uInt16 nMask )
         rSize.Height() = aHorPos.Y();
 
     if( (nMask & (0x0001|0x0002)) == (0x0001|0x0002) )
-        aScrBarBox.Show();
+        aScrBarBox->Show();
     else
-        aScrBarBox.Hide();
+        aScrBarBox->Hide();
 }
 
 // nResult: Bit0 == VerSBar Bit1 == HorSBar
@@ -1265,12 +1268,12 @@ sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
     // vertical scrollbar
     long nTemp = (long)nVisibleCount;
     nTemp--;
-    if( nTemp != aVerSBar.GetVisibleSize() )
+    if( nTemp != aVerSBar->GetVisibleSize() )
     {
         if( !bInVScrollHdl )
         {
-            aVerSBar.SetPageSize( nTemp - 1 );
-            aVerSBar.SetVisibleSize( nTemp );
+            aVerSBar->SetPageSize( nTemp - 1 );
+            aVerSBar->SetVisibleSize( nTemp );
         }
         else
         {
@@ -1280,14 +1283,14 @@ sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
     }
 
     // horizontal scrollbar
-    nTemp = aHorSBar.GetThumbPos();
-    aHorSBar.SetVisibleSize( aOSize.Width() );
-    long nNewThumbPos = aHorSBar.GetThumbPos();
-    Range aRange( aHorSBar.GetRange() );
+    nTemp = aHorSBar->GetThumbPos();
+    aHorSBar->SetVisibleSize( aOSize.Width() );
+    long nNewThumbPos = aHorSBar->GetThumbPos();
+    Range aRange( aHorSBar->GetRange() );
     if( aRange.Max() < nMostRight+25 )
     {
         aRange.Max() = nMostRight+25;
-        aHorSBar.SetRange( aRange );
+        aHorSBar->SetRange( aRange );
     }
 
     if( nTemp != nNewThumbPos )
@@ -1303,15 +1306,15 @@ sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
     }
 
     if( nResult & 0x0001 )
-        aVerSBar.Show();
+        aVerSBar->Show();
     else
-        aVerSBar.Hide();
+        aVerSBar->Hide();
 
     if( nResult & 0x0002 )
-        aHorSBar.Show();
+        aHorSBar->Show();
     else
     {
-        aHorSBar.Hide();
+        aHorSBar->Hide();
     }
     rSize = aOSize;
     return nResult;
@@ -1319,9 +1322,9 @@ sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
 
 void SvImpLBox::InitScrollBarBox()
 {
-    aScrBarBox.SetSizePixel( Size(nVerSBarWidth, nHorSBarHeight) );
+    aScrBarBox->SetSizePixel( Size(nVerSBarWidth, nHorSBarHeight) );
     Size aSize( pView->Control::GetOutputSizePixel() );
-    aScrBarBox.SetPosPixel( Point(aSize.Width()-nVerSBarWidth, aSize.Height()-nHorSBarHeight));
+    aScrBarBox->SetPosPixel( Point(aSize.Width()-nVerSBarWidth, aSize.Height()-nHorSBarHeight));
 }
 
 void SvImpLBox::Resize()
@@ -1339,10 +1342,10 @@ void SvImpLBox::Resize()
     }
     // HACK, as in floating and docked windows the scrollbars might not be drawn
     // correctly/not be drawn at all after resizing!
-    if( aHorSBar.IsVisible())
-        aHorSBar.Invalidate();
-    if( aVerSBar.IsVisible())
-        aVerSBar.Invalidate();
+    if( aHorSBar->IsVisible())
+        aHorSBar->Invalidate();
+    if( aVerSBar->IsVisible())
+        aVerSBar->Invalidate();
     nFlags &= (~(F_IN_RESIZE | F_PAINTED));
 }
 
@@ -1351,7 +1354,7 @@ void SvImpLBox::FillView()
     if( !pStartEntry )
     {
         sal_uInt16 nVisibleViewCount = (sal_uInt16)(pView->GetVisibleCount());
-        sal_uInt16 nTempThumb = (sal_uInt16)aVerSBar.GetThumbPos();
+        sal_uInt16 nTempThumb = (sal_uInt16)aVerSBar->GetThumbPos();
         if( nTempThumb >= nVisibleViewCount )
             nTempThumb = nVisibleViewCount - 1;
         pStartEntry = pView->GetEntryAtVisPos(nTempThumb);
@@ -1380,7 +1383,7 @@ void SvImpLBox::FillView()
             }
             if( bFound )
             {
-                aVerSBar.SetThumbPos( nThumb );
+                aVerSBar->SetThumbPos( nThumb );
                 ShowCursor( true ); // recalculate focus rectangle
                 pView->Invalidate();
             }
@@ -1399,17 +1402,17 @@ void SvImpLBox::ShowVerSBar()
         nVis = pView->GetVisibleCount();
     if( bVerBar || (nVisibleCount && nVis > (sal_uLong)(nVisibleCount-1)) )
     {
-        if( !aVerSBar.IsVisible() )
+        if( !aVerSBar->IsVisible() )
         {
             pView->nFocusWidth = -1;
             AdjustScrollBars( aOutputSize );
             if( GetUpdateMode() )
-                aVerSBar.Update();
+                aVerSBar->Update();
         }
     }
     else
     {
-        if( aVerSBar.IsVisible() )
+        if( aVerSBar->IsVisible() )
         {
             pView->nFocusWidth = -1;
             AdjustScrollBars( aOutputSize );
@@ -1422,20 +1425,20 @@ void SvImpLBox::ShowVerSBar()
     nMaxRight = nMaxRight + aPos.X() - 1;
     if( nMaxRight < nMostRight  )
     {
-        if( !aHorSBar.IsVisible() )
+        if( !aHorSBar->IsVisible() )
         {
             pView->nFocusWidth = -1;
             AdjustScrollBars( aOutputSize );
             if( GetUpdateMode() )
-                aHorSBar.Update();
+                aHorSBar->Update();
         }
         else
         {
-            Range aRange( aHorSBar.GetRange() );
+            Range aRange( aHorSBar->GetRange() );
             if( aRange.Max() < nMostRight+25 )
             {
                 aRange.Max() = nMostRight+25;
-                aHorSBar.SetRange( aRange );
+                aHorSBar->SetRange( aRange );
             }
             else
             {
@@ -1446,7 +1449,7 @@ void SvImpLBox::ShowVerSBar()
     }
     else
     {
-        if( aHorSBar.IsVisible() )
+        if( aHorSBar->IsVisible() )
         {
             pView->nFocusWidth = -1;
             AdjustScrollBars( aOutputSize );
@@ -1460,10 +1463,10 @@ void SvImpLBox::SyncVerThumb()
     if( pStartEntry )
     {
         long nEntryPos = pView->GetVisiblePos( pStartEntry );
-        aVerSBar.SetThumbPos( nEntryPos );
+        aVerSBar->SetThumbPos( nEntryPos );
     }
     else
-        aVerSBar.SetThumbPos( 0 );
+        aVerSBar->SetThumbPos( 0 );
 }
 
 bool SvImpLBox::IsEntryInView( SvTreeListEntry* pEntry ) const
@@ -1528,7 +1531,7 @@ void SvImpLBox::EntryExpanded( SvTreeListEntry* pEntry )
             InvalidateEntriesFrom( nY );
             FindMostRight( pEntry, 0  );
         }
-        aVerSBar.SetRange( Range(0, pView->GetVisibleCount()-1 ) );
+        aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1 ) );
         // if we expanded before the thumb, the thumb's position has to be
         // corrected
         SyncVerThumb();
@@ -1551,10 +1554,10 @@ void SvImpLBox::EntryCollapsed( SvTreeListEntry* pEntry )
 
     if( pStartEntry )
     {
-        long nOldThumbPos   = aVerSBar.GetThumbPos();
+        long nOldThumbPos   = aVerSBar->GetThumbPos();
         sal_uLong nVisList      = pView->GetVisibleCount();
-        aVerSBar.SetRange( Range(0, nVisList-1) );
-        long nNewThumbPos   = aVerSBar.GetThumbPos();
+        aVerSBar->SetRange( Range(0, nVisList-1) );
+        long nNewThumbPos   = aVerSBar->GetThumbPos();
         if( nNewThumbPos != nOldThumbPos  )
         {
             pStartEntry = pView->First();
@@ -1714,7 +1717,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
         // drawn correctly (in this case they're deleted)
         if( pStartEntry && (pStartEntry != pOldStartEntry || pEntry == (SvTreeListEntry*)pView->GetModel()->Last()) )
         {
-            aVerSBar.SetThumbPos( pView->GetVisiblePos( pStartEntry ));
+            aVerSBar->SetThumbPos( pView->GetVisiblePos( pStartEntry ));
             pView->Invalidate( GetVisibleArea() );
         }
         else
@@ -1741,11 +1744,11 @@ void SvImpLBox::EntryRemoved()
     {
         if( nFlags & F_REMOVED_RECALC_MOST_RIGHT )
             FindMostRight(0);
-        aVerSBar.SetRange( Range(0, pView->GetVisibleCount()-1 ) );
+        aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1 ) );
         FillView();
         if( pStartEntry )
             // if something above the thumb was deleted
-            aVerSBar.SetThumbPos( pView->GetVisiblePos( pStartEntry) );
+            aVerSBar->SetThumbPos( pView->GetVisiblePos( pStartEntry) );
 
         ShowVerSBar();
         if( pCursor && pView->HasFocus() && !pView->IsSelected(pCursor) )
@@ -1810,7 +1813,7 @@ void SvImpLBox::EntryMoved( SvTreeListEntry* pEntry )
         // #i97346#
         pStartEntry = pView->First();
 
-    aVerSBar.SetRange( Range(0, pView->GetVisibleCount()-1));
+    aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1));
     sal_uInt16 nFirstPos = (sal_uInt16)pTree->GetAbsPos( pStartEntry );
     sal_uInt16 nNewPos = (sal_uInt16)pTree->GetAbsPos( pEntry );
     FindMostRight(0);
@@ -1882,7 +1885,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
             pView->Invalidate();
 
         SetMostRight( pEntry );
-        aVerSBar.SetRange( Range(0, pView->GetVisibleCount()-1));
+        aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1));
         SyncVerThumb(); // if something was inserted before the thumb
         ShowVerSBar();
         ShowCursor( true );
@@ -2159,7 +2162,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
     bool bKeyUsed = true;
 
-    sal_uInt16  nDelta = (sal_uInt16)aVerSBar.GetPageSize();
+    sal_uInt16  nDelta = (sal_uInt16)aVerSBar->GetPageSize();
     sal_uInt16  aCode = rKeyCode.GetCode();
 
     bool    bShift = rKeyCode.IsShift();
@@ -2257,12 +2260,12 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             }
             else if( nWindowStyle & WB_HSCROLL )
             {
-                long    nThumb = aHorSBar.GetThumbPos();
-                nThumb += aHorSBar.GetLineSize();
-                long    nOldThumb = aHorSBar.GetThumbPos();
-                aHorSBar.SetThumbPos( nThumb );
+                long    nThumb = aHorSBar->GetThumbPos();
+                nThumb += aHorSBar->GetLineSize();
+                long    nOldThumb = aHorSBar->GetThumbPos();
+                aHorSBar->SetThumbPos( nThumb );
                 nThumb = nOldThumb;
-                nThumb -= aHorSBar.GetThumbPos();
+                nThumb -= aHorSBar->GetThumbPos();
                 nThumb *= -1;
                 if( nThumb )
                 {
@@ -2288,12 +2291,12 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             }
             else if ( nWindowStyle & WB_HSCROLL )
             {
-                long    nThumb = aHorSBar.GetThumbPos();
-                nThumb -= aHorSBar.GetLineSize();
-                long    nOldThumb = aHorSBar.GetThumbPos();
-                aHorSBar.SetThumbPos( nThumb );
+                long    nThumb = aHorSBar->GetThumbPos();
+                nThumb -= aHorSBar->GetLineSize();
+                long    nOldThumb = aHorSBar->GetThumbPos();
+                aHorSBar->SetThumbPos( nThumb );
                 nThumb = nOldThumb;
-                nThumb -= aHorSBar.GetThumbPos();
+                nThumb -= aHorSBar->GetThumbPos();
                 if( nThumb )
                 {
                     KeyLeftRight( -nThumb );
@@ -2985,7 +2988,7 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
 
     // scroll mouse event?
     if( ( ( nCommand == COMMAND_WHEEL ) || ( nCommand == COMMAND_STARTAUTOSCROLL ) || ( nCommand == COMMAND_AUTOSCROLL ) )
-        && pView->HandleScrollCommand( rCEvt, &aHorSBar, &aVerSBar ) )
+        && pView->HandleScrollCommand( rCEvt, aHorSBar.get(), aVerSBar.get() ) )
             return;
 
     if( bContextMenuHandling && nCommand == COMMAND_CONTEXTMENU )

@@ -52,7 +52,13 @@ namespace svt { namespace table
 
     TableDataWindow::~TableDataWindow()
     {
+        dispose();
+    }
+
+    void TableDataWindow::dispose()
+    {
         impl_hideTipWindow();
+        Window::dispose();
     }
 
 

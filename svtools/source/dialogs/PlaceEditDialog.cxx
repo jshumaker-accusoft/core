@@ -81,10 +81,6 @@ PlaceEditDialog::PlaceEditDialog( vcl::Window* pParent, const boost::shared_ptr<
     }
 }
 
-PlaceEditDialog::~PlaceEditDialog()
-{
-}
-
 OUString PlaceEditDialog::GetServerUrl()
 {
     OUString sUrl;

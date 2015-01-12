@@ -23,6 +23,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
 #include "svtaccessiblefactory.hxx"
@@ -159,9 +160,9 @@ class SvxIconChoiceCtrl_Impl
 
     bool                    bChooseWithCursor;
     EntryList_Impl          aEntries;
-    ScrollBar               aVerSBar;
-    ScrollBar               aHorSBar;
-    ScrollBarBox            aScrBarBox;
+    VclPtr<ScrollBar>       aVerSBar;
+    VclPtr<ScrollBar>       aHorSBar;
+    VclPtr<ScrollBarBox>    aScrBarBox;
     Rectangle               aCurSelectionRect;
     std::vector<Rectangle*> aSelectedRectList;
     Idle                    aEditIdle;                 // for editing in place

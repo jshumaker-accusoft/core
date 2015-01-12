@@ -76,7 +76,8 @@ public:
                         const OUString& rData,
                         const Link& rNotifyEditEnd );
 
-                    virtual ~IcnViewEdit_Impl();
+    virtual         ~IcnViewEdit_Impl();
+    virtual void    dispose() SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     bool            EditingCanceled() const { return bCanceled; }
@@ -89,9 +90,9 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     WinBits nWinStyle
 ) :
     aEntries( this ),
-    aVerSBar( pCurView, WB_DRAG | WB_VSCROLL ),
-    aHorSBar( pCurView, WB_DRAG | WB_HSCROLL ),
-    aScrBarBox( pCurView ),
+    aVerSBar( new ScrollBar(pCurView, WB_DRAG | WB_VSCROLL) ),
+    aHorSBar( new ScrollBar(pCurView, WB_DRAG | WB_HSCROLL) ),
+    aScrBarBox( new ScrollBarBox(pCurView) ),
     aImageSize( 32, 32 ),
     pColumns( 0 )
 {
@@ -126,14 +127,14 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pImpCursor = new IcnCursor_Impl( this );
     pGridMap = new IcnGridMap_Impl( this );
 
-    aVerSBar.SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollUpDownHdl ) );
-    aHorSBar.SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl ) );
+    aVerSBar->SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollUpDownHdl ) );
+    aHorSBar->SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl ) );
     Link aEndScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, EndScrollHdl ) );
-    aVerSBar.SetEndScrollHdl( aEndScrollHdl );
-    aHorSBar.SetEndScrollHdl( aEndScrollHdl );
+    aVerSBar->SetEndScrollHdl( aEndScrollHdl );
+    aHorSBar->SetEndScrollHdl( aEndScrollHdl );
 
-    nHorSBarHeight = aHorSBar.GetSizePixel().Height();
-    nVerSBarWidth = aVerSBar.GetSizePixel().Width();
+    nHorSBarHeight = aHorSBar->GetSizePixel().Height();
+    nVerSBarWidth = aVerSBar->GetSizePixel().Width();
 
     aEditIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
     aEditIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
@@ -168,6 +169,10 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     delete pEntryPaintDev;
     ClearSelectedRectList();
     ClearColumnList();
+    aVerSBar.disposeAndClear();
+    aHorSBar.disposeAndClear();
+    aScrBarBox.disposeAndClear();
+
 }
 
 void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
@@ -503,11 +508,11 @@ void SvxIconChoiceCtrl_Impl::AdjustVirtSize( const Rectangle& rRect )
         Range aRange;
         aVirtOutputSize.Width() += nWidthOffs;
         aRange.Max() = aVirtOutputSize.Width();
-        aHorSBar.SetRange( aRange );
+        aHorSBar->SetRange( aRange );
 
         aVirtOutputSize.Height() += nHeightOffs;
         aRange.Max() = aVirtOutputSize.Height();
-        aVerSBar.SetRange( aRange );
+        aVerSBar->SetRange( aRange );
 
         pImpCursor->Clear();
         pGridMap->OutputSizeChanged();
@@ -753,9 +758,9 @@ void SvxIconChoiceCtrl_Impl::RepaintEntries( sal_uInt16 nEntryFlagsMask )
 
 void SvxIconChoiceCtrl_Impl::InitScrollBarBox()
 {
-    aScrBarBox.SetSizePixel( Size(nVerSBarWidth-1, nHorSBarHeight-1) );
+    aScrBarBox->SetSizePixel( Size(nVerSBarWidth-1, nHorSBarHeight-1) );
     Size aSize( pView->GetOutputSizePixel() );
-    aScrBarBox.SetPosPixel( Point(aSize.Width()-nVerSBarWidth+1, aSize.Height()-nHorSBarHeight+1));
+    aScrBarBox->SetPosPixel( Point(aSize.Width()-nVerSBarWidth+1, aSize.Height()-nHorSBarHeight+1));
 }
 
 bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
@@ -1256,8 +1261,8 @@ void SvxIconChoiceCtrl_Impl::PositionScrollBars( long nRealWidth, long nRealHeig
     Point aPos( 0, nRealHeight );
     aPos.Y() -= nHorSBarHeight;
 
-    if( aHorSBar.GetPosPixel() != aPos )
-        aHorSBar.SetPosPixel( aPos );
+    if( aHorSBar->GetPosPixel() != aPos )
+        aHorSBar->SetPosPixel( aPos );
 
     // vertical scrollbar
     aPos.X() = nRealWidth; aPos.Y() = 0;
@@ -1265,8 +1270,8 @@ void SvxIconChoiceCtrl_Impl::PositionScrollBars( long nRealWidth, long nRealHeig
     aPos.X()++;
     aPos.Y()--;
 
-    if( aVerSBar.GetPosPixel() != aPos )
-        aVerSBar.SetPosPixel( aPos );
+    if( aVerSBar->GetPosPixel() != aPos )
+        aVerSBar->SetPosPixel( aPos );
 }
 
 void SvxIconChoiceCtrl_Impl::AdjustScrollBars( bool )
@@ -1346,27 +1351,27 @@ void SvxIconChoiceCtrl_Impl::AdjustScrollBars( bool )
     }
 
     // size vertical scrollbar
-    long nThumb = aVerSBar.GetThumbPos();
+    long nThumb = aVerSBar->GetThumbPos();
     Size aSize( nVerSBarWidth, nRealHeight );
     aSize.Height() += 2;
-    if( aSize != aVerSBar.GetSizePixel() )
-        aVerSBar.SetSizePixel( aSize );
-    aVerSBar.SetVisibleSize( nVisibleHeight );
-    aVerSBar.SetPageSize( GetScrollBarPageSize( nVisibleHeight ));
+    if( aSize != aVerSBar->GetSizePixel() )
+        aVerSBar->SetSizePixel( aSize );
+    aVerSBar->SetVisibleSize( nVisibleHeight );
+    aVerSBar->SetPageSize( GetScrollBarPageSize( nVisibleHeight ));
 
     if( nResult & 0x0001 )
     {
-        aVerSBar.SetThumbPos( nThumb );
-        aVerSBar.Show();
+        aVerSBar->SetThumbPos( nThumb );
+        aVerSBar->Show();
     }
     else
     {
-        aVerSBar.SetThumbPos( 0 );
-        aVerSBar.Hide();
+        aVerSBar->SetThumbPos( 0 );
+        aVerSBar->Hide();
     }
 
     // size horizontal scrollbar
-    nThumb = aHorSBar.GetThumbPos();
+    nThumb = aHorSBar->GetThumbPos();
     aSize.Width() = nRealWidth;
     aSize.Height() = nHorSBarHeight;
     aSize.Width()++;
@@ -1375,19 +1380,19 @@ void SvxIconChoiceCtrl_Impl::AdjustScrollBars( bool )
         aSize.Width()++;
         nRealWidth++;
     }
-    if( aSize != aHorSBar.GetSizePixel() )
-        aHorSBar.SetSizePixel( aSize );
-    aHorSBar.SetVisibleSize( nVisibleWidth );
-    aHorSBar.SetPageSize( GetScrollBarPageSize(nVisibleWidth ));
+    if( aSize != aHorSBar->GetSizePixel() )
+        aHorSBar->SetSizePixel( aSize );
+    aHorSBar->SetVisibleSize( nVisibleWidth );
+    aHorSBar->SetPageSize( GetScrollBarPageSize(nVisibleWidth ));
     if( nResult & 0x0002 )
     {
-        aHorSBar.SetThumbPos( nThumb );
-        aHorSBar.Show();
+        aHorSBar->SetThumbPos( nThumb );
+        aHorSBar->Show();
     }
     else
     {
-        aHorSBar.SetThumbPos( 0 );
-        aHorSBar.Hide();
+        aHorSBar->SetThumbPos( 0 );
+        aHorSBar->Hide();
     }
 
     aOutputSize.Width() = nRealWidth;
@@ -1404,9 +1409,9 @@ void SvxIconChoiceCtrl_Impl::AdjustScrollBars( bool )
     }
 
     if( (nResult & (0x0001|0x0002)) == (0x0001|0x0002) )
-        aScrBarBox.Show();
+        aScrBarBox->Show();
     else
-        aScrBarBox.Hide();
+        aScrBarBox->Hide();
 }
 
 void SvxIconChoiceCtrl_Impl::Resize()
@@ -1441,7 +1446,7 @@ void SvxIconChoiceCtrl_Impl::Resize()
 
 bool SvxIconChoiceCtrl_Impl::CheckHorScrollBar()
 {
-    if( !pZOrderList || !aHorSBar.IsVisible() )
+    if( !pZOrderList || !aHorSBar->IsVisible() )
         return false;
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
@@ -1459,18 +1464,18 @@ bool SvxIconChoiceCtrl_Impl::CheckHorScrollBar()
             if( nRight > nMostRight )
                 nMostRight = nRight;
         }
-        aHorSBar.Hide();
+        aHorSBar->Hide();
         aOutputSize.Height() += nHorSBarHeight;
         aVirtOutputSize.Width() = nMostRight;
-        aHorSBar.SetThumbPos( 0 );
+        aHorSBar->SetThumbPos( 0 );
         Range aRange;
         aRange.Max() = nMostRight - 1;
-        aHorSBar.SetRange( aRange  );
-        if( aVerSBar.IsVisible() )
+        aHorSBar->SetRange( aRange  );
+        if( aVerSBar->IsVisible() )
         {
-            Size aSize( aVerSBar.GetSizePixel());
+            Size aSize( aVerSBar->GetSizePixel());
             aSize.Height() += nHorSBarHeight;
-            aVerSBar.SetSizePixel( aSize );
+            aVerSBar->SetSizePixel( aSize );
         }
         return true;
     }
@@ -1479,7 +1484,7 @@ bool SvxIconChoiceCtrl_Impl::CheckHorScrollBar()
 
 bool SvxIconChoiceCtrl_Impl::CheckVerScrollBar()
 {
-    if( !pZOrderList || !aVerSBar.IsVisible() )
+    if( !pZOrderList || !aVerSBar->IsVisible() )
         return false;
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
@@ -1497,18 +1502,18 @@ bool SvxIconChoiceCtrl_Impl::CheckVerScrollBar()
             if( nBottom > nDeepest )
                 nDeepest = nBottom;
         }
-        aVerSBar.Hide();
+        aVerSBar->Hide();
         aOutputSize.Width() += nVerSBarWidth;
         aVirtOutputSize.Height() = nDeepest;
-        aVerSBar.SetThumbPos( 0 );
+        aVerSBar->SetThumbPos( 0 );
         Range aRange;
         aRange.Max() = nDeepest - 1;
-        aVerSBar.SetRange( aRange  );
-        if( aHorSBar.IsVisible() )
+        aVerSBar->SetRange( aRange  );
+        if( aHorSBar->IsVisible() )
         {
-            Size aSize( aHorSBar.GetSizePixel());
+            Size aSize( aHorSBar->GetSizePixel());
             aSize.Width() += nVerSBarWidth;
-            aHorSBar.SetSizePixel( aSize );
+            aHorSBar->SetSizePixel( aSize );
         }
         return true;
     }
@@ -1522,10 +1527,10 @@ void SvxIconChoiceCtrl_Impl::CheckScrollBars()
     CheckVerScrollBar();
     if( CheckHorScrollBar() )
         CheckVerScrollBar();
-    if( aVerSBar.IsVisible() && aHorSBar.IsVisible() )
-        aScrBarBox.Show();
+    if( aVerSBar->IsVisible() && aHorSBar->IsVisible() )
+        aScrBarBox->Show();
     else
-        aScrBarBox.Hide();
+        aScrBarBox->Hide();
 }
 
 
@@ -1808,7 +1813,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     }
 
     bool bResetClipRegion = false;
-    if( !pView->IsClipRegion() && (aVerSBar.IsVisible() || aHorSBar.IsVisible()) )
+    if( !pView->IsClipRegion() && (aVerSBar->IsVisible() || aHorSBar->IsVisible()) )
     {
         Rectangle aOutputArea( GetOutputRect() );
         if( aOutputArea.IsOver(aTextRect) || aOutputArea.IsOver(aBmpRect) )
@@ -2109,8 +2114,8 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingHeight( SvxIconChoiceCtrlEntry* pEntry 
     if( nHeight > nMaxBoundHeight )
     {
         ((SvxIconChoiceCtrl_Impl*)this)->nMaxBoundHeight = nHeight;
-        ((SvxIconChoiceCtrl_Impl*)this)->aHorSBar.SetLineSize( GetScrollBarLineSize() );
-        ((SvxIconChoiceCtrl_Impl*)this)->aVerSBar.SetLineSize( GetScrollBarLineSize() );
+        ((SvxIconChoiceCtrl_Impl*)this)->aHorSBar->SetLineSize( GetScrollBarLineSize() );
+        ((SvxIconChoiceCtrl_Impl*)this)->aVerSBar->SetLineSize( GetScrollBarLineSize() );
     }
     return nHeight;
 }
@@ -2457,16 +2462,16 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, bool bScrBar,
     else
         pView->Invalidate(INVALIDATE_NOCHILDREN);
 
-    if( aHorSBar.IsVisible() || aVerSBar.IsVisible() )
+    if( aHorSBar->IsVisible() || aVerSBar->IsVisible() )
     {
         if( !bScrBar )
         {
             aOrigin *= -1;
             // correct thumbs
-            if(aHorSBar.IsVisible() && aHorSBar.GetThumbPos() != aOrigin.X())
-                aHorSBar.SetThumbPos( aOrigin.X() );
-            if(aVerSBar.IsVisible() && aVerSBar.GetThumbPos() != aOrigin.Y())
-                aVerSBar.SetThumbPos( aOrigin.Y() );
+            if(aHorSBar->IsVisible() && aHorSBar->GetThumbPos() != aOrigin.X())
+                aHorSBar->SetThumbPos( aOrigin.X() );
+            if(aVerSBar->IsVisible() && aVerSBar->GetThumbPos() != aOrigin.Y())
+                aVerSBar->SetThumbPos( aOrigin.Y() );
         }
     }
 
@@ -3319,11 +3324,17 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
 
 IcnViewEdit_Impl::~IcnViewEdit_Impl()
 {
+    dispose();
+}
+
+void IcnViewEdit_Impl::dispose()
+{
     if( !bAlreadyInCallback )
     {
         Application::RemoveAccel( &aAccReturn );
         Application::RemoveAccel( &aAccEscape );
     }
+    MultiLineEdit::dispose();
 }
 
 void IcnViewEdit_Impl::CallCallBackHdl_Impl()
@@ -3446,16 +3457,16 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
     if( nScrBarSize != nHorSBarHeight || nScrBarSize != nVerSBarWidth )
     {
         nHorSBarHeight = nScrBarSize;
-        Size aSize( aHorSBar.GetSizePixel() );
+        Size aSize( aHorSBar->GetSizePixel() );
         aSize.Height() = nScrBarSize;
-        aHorSBar.Hide();
-        aHorSBar.SetSizePixel( aSize );
+        aHorSBar->Hide();
+        aHorSBar->SetSizePixel( aSize );
 
         nVerSBarWidth = nScrBarSize;
-        aSize = aVerSBar.GetSizePixel();
+        aSize = aVerSBar->GetSizePixel();
         aSize.Width() = nScrBarSize;
-        aVerSBar.Hide();
-        aVerSBar.SetSizePixel( aSize );
+        aVerSBar->Hide();
+        aVerSBar->SetSizePixel( aSize );
 
         Size aOSize( pView->Control::GetOutputSizePixel() );
         PositionScrollBars( aOSize.Width(), aOSize.Height() );

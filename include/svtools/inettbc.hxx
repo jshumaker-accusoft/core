@@ -62,7 +62,8 @@ public:
                                     SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
                                     SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
                                     SvtURLBox( vcl::Window* pParent, const ResId& _rResId, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
-                                    virtual ~SvtURLBox();
+    virtual                         ~SvtURLBox();
+    virtual void                    dispose() SAL_OVERRIDE;
 
     void                            SetBaseURL( const OUString& rURL );
     const OUString&                 GetBaseURL() const { return aBaseURL; }

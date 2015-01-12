@@ -447,6 +447,11 @@ TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
 
 TabBar::~TabBar()
 {
+    dispose();
+}
+
+void TabBar::dispose()
+{
     EndEditMode( true );
 
     // Controls loeschen
@@ -464,6 +469,7 @@ TabBar::~TabBar()
         delete (*mpItemList)[ i ];
     }
     delete mpItemList;
+    Window::dispose();
 }
 
 
