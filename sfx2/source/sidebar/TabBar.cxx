@@ -69,12 +69,14 @@ TabBar::TabBar (
 
 
 
-TabBar::~TabBar (void)
+TabBar::~TabBar()
 {
 }
 
-
-
+void TabBar::dispose()
+{
+    vcl::Window::dispose();
+}
 
 void TabBar::Paint (const Rectangle& rUpdateArea)
 {

@@ -57,13 +57,6 @@ DeckTitleBar::DeckTitleBar (
 
 
 
-DeckTitleBar::~DeckTitleBar (void)
-{
-}
-
-
-
-
 void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 {
     if (mbIsCloserVisible != bIsCloserVisible)
@@ -72,16 +65,16 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 
         if (mbIsCloserVisible)
         {
-            maToolBox.InsertItem(
+            maToolBox->InsertItem(
                 mnCloserItemIndex,
                 Theme::GetImage(Theme::Image_Closer));
-            maToolBox.SetQuickHelpText(
+            maToolBox->SetQuickHelpText(
                 mnCloserItemIndex,
                 SFX2_RESSTR(SFX_STR_SIDEBAR_CLOSE_DECK));
         }
         else
-            maToolBox.RemoveItem(
-                maToolBox.GetItemPos(mnCloserItemIndex));
+            maToolBox->RemoveItem(
+                maToolBox->GetItemPos(mnCloserItemIndex));
     }
 }
 
@@ -148,7 +141,7 @@ css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessi
 
 void DeckTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
-    maToolBox.SetItemImage(
+    maToolBox->SetItemImage(
         mnCloserItemIndex,
         Theme::GetImage(Theme::Image_Closer));
     TitleBar::DataChanged(rEvent);

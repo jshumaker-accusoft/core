@@ -193,6 +193,11 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
 
 BackingWindow::~BackingWindow()
 {
+    dispose();
+}
+
+void BackingWindow::dispose()
+{
     // deregister drag&drop helper
     if (mxDropTargetListener.is())
     {
@@ -210,6 +215,7 @@ BackingWindow::~BackingWindow()
         }
         mxDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
     }
+    vcl::Window::dispose();
 }
 
 void BackingWindow::initControls()

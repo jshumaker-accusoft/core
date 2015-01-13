@@ -77,7 +77,12 @@ Deck::Deck (
 
 
 
-Deck::~Deck (void)
+Deck::~Deck()
+{
+    dispose();
+}
+
+void Deck::dispose()
 {
     Dispose();
 
@@ -85,6 +90,7 @@ Deck::~Deck (void)
     // Otherwise that is done by one of our base class destructors
     // without updating maPanels.
     maPanels.clear();
+    vcl::Window::dispose();
 }
 
 
@@ -350,13 +356,6 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
 #ifdef DEBUG
     SetText(OUString("ScrollContainerWindow"));
 #endif
-}
-
-
-
-
-Deck::ScrollContainerWindow::~ScrollContainerWindow (void)
-{
 }
 
 

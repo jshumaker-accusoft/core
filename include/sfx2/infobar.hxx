@@ -51,6 +51,7 @@ class SfxInfoBarWindow : public vcl::Window
                           const OUString& sMessage,
                           std::vector< PushButton* > aButtons );
         virtual ~SfxInfoBarWindow( );
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual const OUString& getId() const { return m_sId; }
         virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
@@ -69,6 +70,7 @@ class SfxInfoBarContainerWindow : public vcl::Window
     public:
         SfxInfoBarContainerWindow( SfxInfoBarContainerChild* pChildWin );
         virtual ~SfxInfoBarContainerWindow( );
+        virtual void dispose() SAL_OVERRIDE;
 
         void appendInfoBar( const OUString& sId, const OUString& sMessage, std::vector< PushButton* > aButtons );
         SfxInfoBarWindow* getInfoBar( const OUString& sId );

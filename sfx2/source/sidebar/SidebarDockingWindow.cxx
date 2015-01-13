@@ -58,7 +58,13 @@ SidebarDockingWindow::SidebarDockingWindow(
 
 SidebarDockingWindow::~SidebarDockingWindow (void)
 {
+    dispose();
+}
+
+void SidebarDockingWindow::dispose()
+{
     DoDispose();
+    SfxDockingWindow::dispose();
 }
 
 

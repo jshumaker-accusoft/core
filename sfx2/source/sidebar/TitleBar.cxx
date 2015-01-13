@@ -42,24 +42,28 @@ TitleBar::TitleBar (
     vcl::Window* pParentWindow,
     const sidebar::Paint& rInitialBackgroundPaint)
     : Window(pParentWindow),
-      maToolBox(this),
+      maToolBox(new SidebarToolBox(this)),
       msTitle(rsTitle),
       maIcon()
 {
     SetBackground(rInitialBackgroundPaint.GetWallpaper());
 
-    maToolBox.SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
+    maToolBox->SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
 }
 
 
 
 
-TitleBar::~TitleBar (void)
+TitleBar::~TitleBar()
 {
+    dispose();
 }
 
-
-
+void TitleBar::dispose()
+{
+    maToolBox.disposeAndClear();
+    vcl::Window::dispose();
+}
 
 void TitleBar::SetTitle (const ::rtl::OUString& rsTitle)
 {
@@ -121,9 +125,9 @@ void TitleBar::setPosSizePixel (
     Window::setPosSizePixel(nX,nY,nWidth,nHeight,nFlags);
 
     // Place the toolbox.
-    const sal_Int32 nToolBoxWidth (maToolBox.GetItemPosRect(0).GetWidth());
-    maToolBox.setPosSizePixel(nWidth-nToolBoxWidth,0, nToolBoxWidth,nHeight, WINDOW_POSSIZE_POSSIZE);
-    maToolBox.Show();
+    const sal_Int32 nToolBoxWidth (maToolBox->GetItemPosRect(0).GetWidth());
+    maToolBox->setPosSizePixel(nWidth-nToolBoxWidth,0, nToolBoxWidth,nHeight, WINDOW_POSSIZE_POSSIZE);
+    maToolBox->Show();
 }
 
 
@@ -223,8 +227,8 @@ void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox)
 {
     (void)pToolBox;
-    OSL_ASSERT(&maToolBox==pToolBox);
-    const sal_uInt16 nItemId (maToolBox.GetHighlightItemId());
+    OSL_ASSERT(maToolBox.get()==pToolBox);
+    const sal_uInt16 nItemId (maToolBox->GetHighlightItemId());
 
     HandleToolBoxItemClick(nItemId);
 

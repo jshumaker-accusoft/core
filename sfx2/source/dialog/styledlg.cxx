@@ -71,17 +71,21 @@ SfxStyleDialog::SfxStyleDialog
 
 
 SfxStyleDialog::~SfxStyleDialog()
+{
+    dispose();
+}
 
 /*  [Description]
 
     Destructor: set ExampleSet to NULL, so that SfxTabDialog does not delete
     the Set from Style.
 */
-
+void SfxStyleDialog::dispose()
 {
     pExampleSet = 0;
     pStyle = 0;
     delete GetInputSetImpl();
+    SfxTabDialog::dispose();
 }
 
 

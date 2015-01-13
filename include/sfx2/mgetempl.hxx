@@ -75,6 +75,7 @@ friend class SfxStyleDialog;
 
     SfxManageStyleSheetPage(vcl::Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SfxManageStyleSheetPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create(vcl::Window *pParent, const SfxItemSet *rAttrSet );
 

@@ -453,7 +453,13 @@ SfxNewFileDialog::SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags)
 
 SfxNewFileDialog::~SfxNewFileDialog()
 {
+    dispose();
+}
+
+void SfxNewFileDialog::dispose()
+{
     delete pImpl;
+    SfxModalDialog::dispose();
 }
 
 bool SfxNewFileDialog::IsTemplate() const

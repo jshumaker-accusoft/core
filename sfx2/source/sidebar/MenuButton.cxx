@@ -44,13 +44,6 @@ MenuButton::MenuButton (vcl::Window* pParentWindow)
 
 
 
-MenuButton::~MenuButton (void)
-{
-}
-
-
-
-
 void MenuButton::Paint (const Rectangle& rUpdateArea)
 {
     switch(mePaintType)

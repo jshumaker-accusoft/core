@@ -327,7 +327,6 @@ protected:
     virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 public:
     CustomPropertiesDurationField( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
-    virtual ~CustomPropertiesDurationField();
 
     void SetDuration( const com::sun::star::util::Duration& rDuration );
     const com::sun::star::util::Duration& GetDuration() const { return m_aDuration; }
@@ -339,7 +338,6 @@ class CustomPropertiesEditButton : public PushButton
 
 public:
     CustomPropertiesEditButton( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
-    virtual ~CustomPropertiesEditButton();
 
     DECL_LINK(ClickHdl, void *);
 };
@@ -360,33 +358,35 @@ public:
 class CustomPropertiesYesNoButton : public Control
 {
 private:
-    RadioButton                     m_aYesButton;
-    RadioButton                     m_aNoButton;
+    VclPtr<RadioButton>             m_aYesButton;
+    VclPtr<RadioButton>             m_aNoButton;
 
 public:
     CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId );
+    virtual ~CustomPropertiesYesNoButton();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Resize() SAL_OVERRIDE;
 
-    inline void     CheckYes() { m_aYesButton.Check(); }
-    inline void     CheckNo() { m_aNoButton.Check(); }
-    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked(); }
+    inline void     CheckYes() { m_aYesButton->Check(); }
+    inline void     CheckNo() { m_aNoButton->Check(); }
+    inline bool     IsYesChecked() const { return m_aYesButton->IsChecked(); }
 };
 
 // struct CustomPropertyLine ---------------------------------------------
 
 struct CustomPropertyLine
 {
-    ComboBox                        m_aNameBox;
-    CustomPropertiesTypeBox         m_aTypeBox;
-    CustomPropertiesEdit            m_aValueEdit;
-    CustomPropertiesDateField       m_aDateField;
-    CustomPropertiesTimeField       m_aTimeField;
-    const OUString                  m_sDurationFormat;
-    CustomPropertiesDurationField   m_aDurationField;
-    CustomPropertiesEditButton     m_aEditButton;
-    CustomPropertiesYesNoButton     m_aYesNoButton;
-    CustomPropertiesRemoveButton    m_aRemoveButton;
+    VclPtr<ComboBox>                      m_aNameBox;
+    VclPtr<CustomPropertiesTypeBox>       m_aTypeBox;
+    VclPtr<CustomPropertiesEdit>          m_aValueEdit;
+    VclPtr<CustomPropertiesDateField>     m_aDateField;
+    VclPtr<CustomPropertiesTimeField>     m_aTimeField;
+    const OUString                        m_sDurationFormat;
+    VclPtr<CustomPropertiesDurationField> m_aDurationField;
+    VclPtr<CustomPropertiesEditButton>    m_aEditButton;
+    VclPtr<CustomPropertiesYesNoButton>   m_aYesNoButton;
+    VclPtr<CustomPropertiesRemoveButton>  m_aRemoveButton;
 
     bool                            m_bIsDate;
     bool                            m_bIsRemoved;
@@ -406,15 +406,15 @@ private:
     FixedText*                          m_pHeaderAccType;
     FixedText*                          m_pHeaderAccValue;
 
-    ComboBox                            m_aNameBox;
-    ListBox                             m_aTypeBox;
-    Edit                                m_aValueEdit;
-    DateField                           m_aDateField;
-    TimeField                           m_aTimeField;
-    Edit                                m_aDurationField;
-    PushButton                          m_aEditButton;
-    CustomPropertiesYesNoButton         m_aYesNoButton;
-    ImageButton                         m_aRemoveButton;
+    VclPtr<ComboBox>                    m_aNameBox;
+    VclPtr<ListBox>                     m_aTypeBox;
+    VclPtr<Edit>                        m_aValueEdit;
+    VclPtr<DateField>                   m_aDateField;
+    VclPtr<TimeField>                   m_aTimeField;
+    VclPtr<Edit>                        m_aDurationField;
+    VclPtr<PushButton>                  m_aEditButton;
+    VclPtr<CustomPropertiesYesNoButton> m_aYesNoButton;
+    VclPtr<ImageButton>                 m_aRemoveButton;
 
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
@@ -444,6 +444,7 @@ public:
         FixedText *pHeaderAccType,
         FixedText *pHeaderAccValue);
     virtual ~CustomPropertiesWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
     sal_uInt16          GetVisibleLineCount() const;
@@ -480,6 +481,7 @@ private:
 public:
     CustomPropertiesControl(vcl::Window* pParent);
     virtual ~CustomPropertiesControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            AddLine( const OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
 

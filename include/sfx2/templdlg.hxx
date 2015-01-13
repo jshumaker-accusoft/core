@@ -44,6 +44,7 @@ class SFX2_DLLPUBLIC SfxTemplatePanelControl : public DockingWindow
 public:
     SfxTemplatePanelControl (SfxBindings* pBindings, vcl::Window* pParentWindow);
     virtual ~SfxTemplatePanelControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void                Update();
     virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;

@@ -115,8 +115,11 @@ friend class SfxSplitWindow;
                         }
 
                         virtual ~SfxEmptySplitWin_Impl()
+                        { dispose(); }
+   virtual void         dispose() SAL_OVERRIDE
                         {
                             aTimer.Stop();
+                            SplitWindow::dispose();
                         }
 
     virtual void        MouseMove( const MouseEvent& ) SAL_OVERRIDE;
@@ -300,6 +303,11 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
 
 SfxSplitWindow::~SfxSplitWindow()
 {
+    dispose();
+}
+
+void SfxSplitWindow::dispose()
+{
     if ( !pWorkWin->GetParent_Impl() )
         SaveConfig_Impl();
 
@@ -312,6 +320,7 @@ SfxSplitWindow::~SfxSplitWindow()
     }
 
     delete pDockArr;
+    SplitWindow::dispose();
 }
 
 void SfxSplitWindow::SaveConfig_Impl()

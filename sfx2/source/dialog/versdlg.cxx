@@ -335,8 +335,14 @@ void SfxVersionDialog::Init_Impl()
 
 SfxVersionDialog::~SfxVersionDialog()
 {
+    dispose();
+}
+
+void SfxVersionDialog::dispose()
+{
     delete m_pTable;
     delete m_pVersionBox;
+    SfxModalDialog::dispose();
 }
 
 void SfxVersionDialog::Open_Impl()
@@ -563,8 +569,14 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, bool bIsS
 
 SfxCmisVersionsDialog::~SfxCmisVersionsDialog()
 {
+    dispose();
+}
+
+void SfxCmisVersionsDialog::dispose()
+{
     delete m_pTable;
     delete m_pVersionBox;
+    SfxModalDialog::dispose();
 }
 
 void SfxCmisVersionsDialog::LoadVersions()

@@ -171,8 +171,8 @@ protected:
                                 xModuleManager;
     DeletionWatcher*            m_pDeletionWatcher;
 
-    SfxActionListBox            aFmtLb;
-    ListBox                     aFilterLb;
+    VclPtr<SfxActionListBox>    aFmtLb;
+    VclPtr<ListBox>             aFilterLb;
     Size                        aSize;
 
     sal_uInt16                      nActFamily; // Id in the ToolBox = Position - 1
@@ -301,7 +301,6 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 public:
     DropToolBox_Impl(vcl::Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
-    virtual ~DropToolBox_Impl();
 };
 // class SfxTemplateDialog_Impl ------------------------------------------
 
@@ -312,10 +311,10 @@ private:
     friend class DropToolBox_Impl;
     friend class SfxTemplatePanelControl;
 
-    vcl::Window* m_pFloat;
-    bool            m_bZoomIn;
-    DropToolBox_Impl    m_aActionTbL;
-    ToolBox             m_aActionTbR;
+    vcl::Window*        m_pFloat;
+    bool                m_bZoomIn;
+    VclPtr<DropToolBox_Impl>    m_aActionTbL;
+    VclPtr<ToolBox>     m_aActionTbR;
 
     DECL_LINK( ToolBoxLSelect, ToolBox * );
     DECL_LINK( ToolBoxRSelect, ToolBox * );

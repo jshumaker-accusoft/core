@@ -70,8 +70,9 @@ public:
                             vcl::Window* pParent ,
                             WinBits nBits);
     virtual             ~SfxTitleDockingWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
-    vcl::Window*             GetWrappedWindow() const { return m_pWrappedWindow; }
+    vcl::Window*        GetWrappedWindow() const { return m_pWrappedWindow; }
     void                SetWrappedWindow(vcl::Window* const pWindow);
 
     virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
@@ -251,7 +252,13 @@ SfxTitleDockingWindow::SfxTitleDockingWindow( SfxBindings* pBind ,
 
 SfxTitleDockingWindow::~SfxTitleDockingWindow()
 {
+    dispose();
+}
+
+void SfxTitleDockingWindow::dispose()
+{
     delete m_pWrappedWindow;
+    SfxDockingWindow::dispose();
 }
 
 void SfxTitleDockingWindow::SetWrappedWindow( vcl::Window* const pWindow )
@@ -1266,8 +1273,14 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
 SfxDockingWindow::~SfxDockingWindow()
 {
+    dispose();
+}
+
+void SfxDockingWindow::dispose()
+{
     ReleaseChildWindow_Impl();
     delete pImp;
+    DockingWindow::dispose();
 }
 
 void SfxDockingWindow::ReleaseChildWindow_Impl()

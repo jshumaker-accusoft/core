@@ -74,13 +74,16 @@ Panel::Panel (
 
 
 
-Panel::~Panel (void)
+Panel::~Panel()
 {
-    Dispose();
+    dispose();
 }
 
-
-
+void Panel::dispose()
+{
+    Dispose();
+    vcl::Window::dispose();
+}
 
 void Panel::Dispose (void)
 {
