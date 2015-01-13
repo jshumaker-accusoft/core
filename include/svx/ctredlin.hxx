@@ -114,6 +114,7 @@ public:
 
     SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     virtual ~SvxRedlinTable();
+    virtual void    dispose() SAL_OVERRIDE;
 
     // For FilterPage only {
     void            SetFilterDate(bool bFlag=true);
@@ -316,6 +317,7 @@ private:
 public:
     SvxTPView(vcl::Window * pParent, VclBuilderContainer *pTopLevel);
     virtual ~SvxTPView();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            InsertWriterHeader();
     void            InsertCalcHeader();
@@ -376,6 +378,7 @@ public:
                     SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel);
 
                     virtual ~SvxAcceptChgCtr();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            ShowFilterPage();
     void            ShowViewPage();

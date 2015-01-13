@@ -83,6 +83,7 @@ public:
                         SvxSuperContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
                                            vcl::Window* pParent);
                         virtual ~SvxSuperContourDlg();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetExecState( bool bEnable );
 

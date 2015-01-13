@@ -60,13 +60,13 @@ class SVX_DLLPUBLIC Svx3DWin : public SfxDockingWindow
     using Window::Update;
 
 private:
-    ImageButton         aBtnGeo;
-    ImageButton         aBtnRepresentation;
-    ImageButton         aBtnLight;
-    ImageButton         aBtnTexture;
-    ImageButton         aBtnMaterial;
-    ImageButton         aBtnUpdate;
-    ImageButton         aBtnAssign;
+    VclPtr<ImageButton>         aBtnGeo;
+    VclPtr<ImageButton>         aBtnRepresentation;
+    VclPtr<ImageButton>         aBtnLight;
+    VclPtr<ImageButton>         aBtnTexture;
+    VclPtr<ImageButton>         aBtnMaterial;
+    VclPtr<ImageButton>         aBtnUpdate;
+    VclPtr<ImageButton>         aBtnAssign;
 
 // geometry
     FixedLine           aFLGeometrie;
@@ -78,13 +78,13 @@ private:
     MetricField         aMtrEndAngle;
     FixedText           aFtDepth;
     MetricField         aMtrDepth;
-      FixedLine           aFLSegments;
+    FixedLine           aFLSegments;
 
     FixedText           aFtHorizontal;
     NumericField        aNumHorizontal;
     FixedText           aFtVertical;
     NumericField        aNumVertical;
-       FixedLine           aFLNormals;
+    FixedLine           aFLNormals;
 
     ImageButton         aBtnNormalsObj;
     ImageButton         aBtnNormalsFlat;
@@ -135,7 +135,7 @@ private:
     ColorLB             aLbAmbientlight;    // ListBox
     ImageButton         aBtnAmbientColor;   // color button
 
-       FixedLine           aFLTexture;
+    FixedLine           aFLTexture;
 
 // Textures
     FixedText           aFtTexKind;
@@ -158,7 +158,7 @@ private:
 
 // material
 // material editor
-       FixedLine           aFLMaterial;
+    FixedLine           aFLMaterial;
     FixedText           aFtMatFavorites;
     ListBox             aLbMatFavorites;
     FixedText           aFtMatColor;
@@ -167,7 +167,7 @@ private:
     FixedText           aFtMatEmission;
     ColorLB             aLbMatEmission;
     ImageButton         aBtnEmissionColor;
-       FixedLine           aFLMatSpecular;
+    FixedLine           aFLMatSpecular;
     FixedText           aFtMatSpecular;
     ColorLB             aLbMatSpecular;
     ImageButton         aBtnSpecularColor;
@@ -240,6 +240,7 @@ public:
             Svx3DWin( SfxBindings* pBindings, SfxChildWindow *pCW,
                         vcl::Window* pParent );
             virtual ~Svx3DWin();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    InitColorLB( const SdrModel* pDoc );
     bool    IsUpdateMode() const { return bUpdate; }

@@ -87,13 +87,13 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, vcl::Window* pParent ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent,
                                     SVX_RES( RID_SVXFLOAT_3D ) ),
-        aBtnGeo             ( this, SVX_RES( BTN_GEO ) ),
-        aBtnRepresentation  ( this, SVX_RES( BTN_REPRESENTATION ) ),
-        aBtnLight           ( this, SVX_RES( BTN_LIGHT ) ),
-        aBtnTexture         ( this, SVX_RES( BTN_TEXTURE ) ),
-        aBtnMaterial        ( this, SVX_RES( BTN_MATERIAL ) ),
-        aBtnUpdate          ( this, SVX_RES( BTN_UPDATE ) ),
-        aBtnAssign          ( this, SVX_RES( BTN_ASSIGN ) ),
+        aBtnGeo             ( new ImageButton(this, SVX_RES( BTN_GEO ) ) ),
+        aBtnRepresentation  ( new ImageButton(this, SVX_RES( BTN_REPRESENTATION ) ) ),
+        aBtnLight           ( new ImageButton(this, SVX_RES( BTN_LIGHT ) ) ),
+        aBtnTexture         ( new ImageButton(this, SVX_RES( BTN_TEXTURE ) ) ),
+        aBtnMaterial        ( new ImageButton(this, SVX_RES( BTN_MATERIAL ) ) ),
+        aBtnUpdate          ( new ImageButton(this, SVX_RES( BTN_UPDATE ) ) ),
+        aBtnAssign          ( new ImageButton(this, SVX_RES( BTN_ASSIGN ) ) ),
         aFLGeometrie       ( this, SVX_RES( FL_GEOMETRIE ) ),
 
         // Geometry
@@ -244,15 +244,15 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     pConvertTo3DItem = new SvxConvertTo3DItem(SID_CONVERT_TO_3D, pBindings);
     pConvertTo3DLatheItem = new SvxConvertTo3DItem(SID_CONVERT_TO_3D_LATHE_FAST, pBindings);
 
-    aBtnAssign.SetClickHdl( LINK( this, Svx3DWin, ClickAssignHdl ) );
-    aBtnUpdate.SetClickHdl( LINK( this, Svx3DWin, ClickUpdateHdl ) );
+    aBtnAssign->SetClickHdl( LINK( this, Svx3DWin, ClickAssignHdl ) );
+    aBtnUpdate->SetClickHdl( LINK( this, Svx3DWin, ClickUpdateHdl ) );
 
     Link aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
-    aBtnGeo.SetClickHdl( aLink );
-    aBtnRepresentation.SetClickHdl( aLink );
-    aBtnLight.SetClickHdl( aLink );
-    aBtnTexture.SetClickHdl( aLink );
-    aBtnMaterial.SetClickHdl( aLink );
+    aBtnGeo->SetClickHdl( aLink );
+    aBtnRepresentation->SetClickHdl( aLink );
+    aBtnLight->SetClickHdl( aLink );
+    aBtnTexture->SetClickHdl( aLink );
+    aBtnMaterial->SetClickHdl( aLink );
 
     aLink = LINK( this, Svx3DWin, ClickHdl );
     aBtnPerspective.SetClickHdl( aLink );
@@ -430,6 +430,11 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 
 Svx3DWin::~Svx3DWin()
 {
+    dispose();
+}
+
+void Svx3DWin::dispose()
+{
     delete p3DView;
     delete pVDev;
     delete pModel;
@@ -441,12 +446,22 @@ Svx3DWin::~Svx3DWin()
     delete mpRemember2DAttributes;
 
     delete mpImpl;
+
+    aBtnGeo.disposeAndClear();
+    aBtnRepresentation.disposeAndClear();
+    aBtnLight.disposeAndClear();
+    aBtnTexture.disposeAndClear();
+    aBtnMaterial.disposeAndClear();
+    aBtnUpdate.disposeAndClear();
+    aBtnAssign.disposeAndClear();
+
+    SfxDockingWindow::dispose();
 }
 
 
 void Svx3DWin::Construct()
 {
-    aBtnGeo.Check();
+    aBtnGeo->Check();
     Link aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
     aLink.Call( &aBtnGeo );
     aCtlLightPreview.Hide();
@@ -2238,8 +2253,8 @@ void Svx3DWin::Resize()
             Size aObjSize;
 
             // Hide
-            aBtnUpdate.Hide();
-            aBtnAssign.Hide();
+            aBtnUpdate->Hide();
+            aBtnAssign->Hide();
 
             aBtnConvertTo3D.Hide();
             aBtnLatheObject.Hide();
@@ -2255,8 +2270,8 @@ void Svx3DWin::Resize()
             aFLMaterial.Hide();
 
             // Moving / resizing
-            aBtnUpdate.SetPosPixel( aBtnUpdate.GetPosPixel() + aXPt );
-            aBtnAssign.SetPosPixel( aBtnAssign.GetPosPixel() + aXPt );
+            aBtnUpdate->SetPosPixel( aBtnUpdate->GetPosPixel() + aXPt );
+            aBtnAssign->SetPosPixel( aBtnAssign->GetPosPixel() + aXPt );
 
             // Preview controls
             aObjSize = aCtlPreview.GetOutputSizePixel();
@@ -2283,22 +2298,22 @@ void Svx3DWin::Resize()
             aBtnPerspective.SetPosPixel( aBtnPerspective.GetPosPixel() + aYPt );
 
             // Show
-            aBtnUpdate.Show();
-            aBtnAssign.Show();
+            aBtnUpdate->Show();
+            aBtnAssign->Show();
 
             aBtnConvertTo3D.Show();
             aBtnLatheObject.Show();
             aBtnPerspective.Show();
 
-            if( aBtnGeo.IsChecked() )
+            if( aBtnGeo->IsChecked() )
                 ClickViewTypeHdl( &aBtnGeo );
-            if( aBtnRepresentation.IsChecked() )
+            if( aBtnRepresentation->IsChecked() )
                 ClickViewTypeHdl( &aBtnRepresentation );
-            if( aBtnLight.IsChecked() )
+            if( aBtnLight->IsChecked() )
                 ClickViewTypeHdl( &aBtnLight );
-            if( aBtnTexture.IsChecked() )
+            if( aBtnTexture->IsChecked() )
                 ClickViewTypeHdl( &aBtnTexture );
-            if( aBtnMaterial.IsChecked() )
+            if( aBtnMaterial->IsChecked() )
                 ClickViewTypeHdl( &aBtnMaterial );
 
             aSize = aWinSize;
@@ -2311,8 +2326,8 @@ void Svx3DWin::Resize()
 
 IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
 {
-    bUpdate = !aBtnUpdate.IsChecked();
-    aBtnUpdate.Check( bUpdate );
+    bUpdate = !aBtnUpdate->IsChecked();
+    aBtnUpdate->Check( bUpdate );
 
     if( bUpdate )
     {
@@ -2354,23 +2369,23 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
     if( pBtn )
     {
         // Since the permanent updating of the preview would be too expensive
-        bool bUpdatePreview = aBtnLight.IsChecked();
+        bool bUpdatePreview = aBtnLight->IsChecked();
 
-        aBtnGeo.Check( &aBtnGeo == pBtn );
-        aBtnRepresentation.Check( &aBtnRepresentation == pBtn );
-        aBtnLight.Check( &aBtnLight == pBtn );
-        aBtnTexture.Check( &aBtnTexture == pBtn );
-        aBtnMaterial.Check( &aBtnMaterial == pBtn );
+        aBtnGeo->Check( &aBtnGeo == pBtn );
+        aBtnRepresentation->Check( &aBtnRepresentation == pBtn );
+        aBtnLight->Check( &aBtnLight == pBtn );
+        aBtnTexture->Check( &aBtnTexture == pBtn );
+        aBtnMaterial->Check( &aBtnMaterial == pBtn );
 
-        if( aBtnGeo.IsChecked() )
+        if( aBtnGeo->IsChecked() )
             eViewType = VIEWTYPE_GEO;
-        if( aBtnRepresentation.IsChecked() )
+        if( aBtnRepresentation->IsChecked() )
             eViewType = VIEWTYPE_REPRESENTATION;
-        if( aBtnLight.IsChecked() )
+        if( aBtnLight->IsChecked() )
             eViewType = VIEWTYPE_LIGHT;
-        if( aBtnTexture.IsChecked() )
+        if( aBtnTexture->IsChecked() )
             eViewType = VIEWTYPE_TEXTURE;
-        if( aBtnMaterial.IsChecked() )
+        if( aBtnMaterial->IsChecked() )
             eViewType = VIEWTYPE_MATERIAL;
 
         // Geometry
@@ -2594,17 +2609,17 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aFLMatSpecular.Hide();
             aFLMaterial.Hide();
         }
-        if( bUpdatePreview && !aBtnLight.IsChecked() )
+        if( bUpdatePreview && !aBtnLight->IsChecked() )
             UpdatePreview();
 
     }
     else
     {
-        aBtnGeo.Check( eViewType == VIEWTYPE_GEO );
-        aBtnRepresentation.Check( eViewType == VIEWTYPE_REPRESENTATION );
-        aBtnLight.Check( eViewType == VIEWTYPE_LIGHT );
-        aBtnTexture.Check( eViewType == VIEWTYPE_TEXTURE );
-        aBtnMaterial.Check( eViewType == VIEWTYPE_MATERIAL );
+        aBtnGeo->Check( eViewType == VIEWTYPE_GEO );
+        aBtnRepresentation->Check( eViewType == VIEWTYPE_REPRESENTATION );
+        aBtnLight->Check( eViewType == VIEWTYPE_LIGHT );
+        aBtnTexture->Check( eViewType == VIEWTYPE_TEXTURE );
+        aBtnMaterial->Check( eViewType == VIEWTYPE_MATERIAL );
     }
     return( 0L );
 }

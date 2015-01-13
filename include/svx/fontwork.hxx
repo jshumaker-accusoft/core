@@ -91,29 +91,29 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
 
-    ToolBox         aTbxStyle;
-    ToolBox         aTbxAdjust;
+    VclPtr<ToolBox>         aTbxStyle;
+    VclPtr<ToolBox>         aTbxAdjust;
 
-    FixedImage      aFbDistance;
-    MetricField     aMtrFldDistance;
-    FixedImage      aFbTextStart;
-    MetricField     aMtrFldTextStart;
+    VclPtr<FixedImage>      aFbDistance;
+    VclPtr<MetricField>     aMtrFldDistance;
+    VclPtr<FixedImage>      aFbTextStart;
+    VclPtr<MetricField>     aMtrFldTextStart;
 
-    ToolBox         aTbxShadow;
+    VclPtr<ToolBox>         aTbxShadow;
 
-    FixedImage      aFbShadowX;
-    MetricField     aMtrFldShadowX;
-    FixedImage      aFbShadowY;
-    MetricField     aMtrFldShadowY;
+    VclPtr<FixedImage>      aFbShadowX;
+    VclPtr<MetricField>     aMtrFldShadowX;
+    VclPtr<FixedImage>      aFbShadowY;
+    VclPtr<MetricField>     aMtrFldShadowY;
 
-    ColorLB         aShadowColorLB;
+    VclPtr<ColorLB>         aShadowColorLB;
 
     SfxBindings&    rBindings;
     Idle            aInputIdle;
 
-    sal_uInt16          nLastStyleTbxId;
-    sal_uInt16          nLastAdjustTbxId;
-    sal_uInt16          nLastShadowTbxId;
+    sal_uInt16      nLastStyleTbxId;
+    sal_uInt16      nLastAdjustTbxId;
+    sal_uInt16      nLastShadowTbxId;
     long            nSaveShadowX;
     long            nSaveShadowY;
     long            nSaveShadowAngle;
@@ -161,6 +161,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
                         vcl::Window* pParent,
                         const ResId& rResId );
     virtual ~SvxFontWorkDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetColorList(const XColorListRef &pTable);
     void SetActive(bool bActivate = true);

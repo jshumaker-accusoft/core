@@ -220,7 +220,13 @@ SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 n
 
 SvxHFPage::~SvxHFPage()
 {
+    dispose();
+}
+
+void SvxHFPage::dispose()
+{
     delete pBBSet;
+    SfxTabPage::dispose();
 }
 
 

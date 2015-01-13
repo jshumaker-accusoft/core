@@ -316,6 +316,11 @@ SvxRuler::SvxRuler(
 
 SvxRuler::~SvxRuler()
 {
+    dispose();
+}
+
+void SvxRuler::dispose()
+{
     /* Destructor ruler; release internal buffer */
     REMOVE_DEBUG_WINDOW
     if(bListening)
@@ -328,6 +333,7 @@ SvxRuler::~SvxRuler()
     delete[] pCtrlItem;
 
     pBindings->LeaveRegistrations();
+    Ruler::dispose();
 }
 
 long SvxRuler::MakePositionSticky(long aPosition, long aPointOfReference, bool aSnapToFrameMargin) const
