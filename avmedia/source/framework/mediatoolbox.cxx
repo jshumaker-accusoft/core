@@ -40,7 +40,6 @@ class MediaToolBoxControl_Impl : public MediaControl
 public:
 
                             MediaToolBoxControl_Impl( vcl::Window& rParent, MediaToolBoxControl& rControl );
-                            virtual ~MediaToolBoxControl_Impl();
 
     void                    update() SAL_OVERRIDE;
     void                    execute( const MediaItem& rItem ) SAL_OVERRIDE;
@@ -57,12 +56,6 @@ MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( vcl::Window& rParent, MediaT
     mpToolBoxControl( &rControl )
 {
     SetSizePixel( getMinSizePixel() );
-}
-
-
-
-MediaToolBoxControl_Impl::~MediaToolBoxControl_Impl()
-{
 }
 
 
