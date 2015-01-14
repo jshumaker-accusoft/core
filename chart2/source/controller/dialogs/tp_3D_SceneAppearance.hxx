@@ -38,7 +38,6 @@ public:
         vcl::Window* pWindow,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
-    virtual ~ThreeD_SceneAppearance_TabPage();
 
     // has to be called in case the dialog was closed with OK
     void commitPendingChanges();
