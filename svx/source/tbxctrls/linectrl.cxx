@@ -256,7 +256,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     SfxPopupWindow( nSlotId,
                     rFrame,
                     WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    aLineEndSet     ( new ValueSet(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
@@ -277,7 +277,7 @@ SvxLineEndWindow::SvxLineEndWindow(
                     rFrame,
                     pParentWindow,
                     WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    aLineEndSet     ( new ValueSet(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
@@ -295,7 +295,7 @@ void SvxLineEndWindow::implInit()
     const SfxPoolItem*  pItem   = NULL;
 
     SetHelpId( HID_POPUP_LINEEND );
-    aLineEndSet.SetHelpId( HID_POPUP_LINEEND_CTRL );
+    aLineEndSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
 
     if ( pDocSh )
     {
@@ -309,8 +309,8 @@ void SvxLineEndWindow::implInit()
     }
     DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
 
-    aLineEndSet.SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
-    aLineEndSet.SetColCount( nCols );
+    aLineEndSet->SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
+    aLineEndSet->SetColCount( nCols );
 
     // ValueSet fill with entries of LineEndList
     FillValueSet();
@@ -318,7 +318,7 @@ void SvxLineEndWindow::implInit()
     AddStatusListener( OUString( ".uno:LineEndListState" ));
 
     //ChangeHelpId( HID_POPUP_LINEENDSTYLE );
-    aLineEndSet.Show();
+    aLineEndSet->Show();
 }
 
 SfxPopupWindow* SvxLineEndWindow::Clone() const
@@ -330,15 +330,20 @@ SfxPopupWindow* SvxLineEndWindow::Clone() const
 
 SvxLineEndWindow::~SvxLineEndWindow()
 {
+    dispose();
 }
 
-
+void SvxLineEndWindow::dispose()
+{
+    aLineEndSet.disposeAndClear();
+    SfxPopupWindow::dispose();
+}
 
 IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
 {
     boost::scoped_ptr<XLineEndItem> pLineEndItem;
     boost::scoped_ptr<XLineStartItem> pLineStartItem;
-    sal_uInt16                  nId = aLineEndSet.GetSelectItemId();
+    sal_uInt16                  nId = aLineEndSet->GetSelectItemId();
 
     if( nId == 1 )
     {
@@ -381,7 +386,7 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
-    aLineEndSet.SetNoSelection();
+    aLineEndSet->SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  OUString( ".uno:LineEndStyle" ),
@@ -416,8 +421,8 @@ void SvxLineEndWindow::FillValueSet()
         Point aPt1( aBmpSize.Width(), 0 );
 
         aVD.DrawBitmap( Point(), aBmp );
-        aLineEndSet.InsertItem(1, Image(aVD.GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
-        aLineEndSet.InsertItem(2, Image(aVD.GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
+        aLineEndSet->InsertItem(1, Image(aVD.GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
+        aLineEndSet->InsertItem(2, Image(aVD.GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
 
         delete pLineEndList->Remove( nCount );
 
@@ -429,13 +434,13 @@ void SvxLineEndWindow::FillValueSet()
             OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
             aVD.DrawBitmap( aPt0, aBmp );
-            aLineEndSet.InsertItem((sal_uInt16)((i+1L)*2L+1L),
+            aLineEndSet->InsertItem((sal_uInt16)((i+1L)*2L+1L),
                     Image(aVD.GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
-            aLineEndSet.InsertItem((sal_uInt16)((i+2L)*2L),
+            aLineEndSet->InsertItem((sal_uInt16)((i+2L)*2L),
                     Image(aVD.GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
         }
         nLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
-        aLineEndSet.SetLineCount( nLines );
+        aLineEndSet->SetLineCount( nLines );
 
         SetSize();
     }
@@ -452,15 +457,15 @@ void SvxLineEndWindow::Resize()
         mbInResize = true;
         if ( !IsRollUp() )
         {
-            aLineEndSet.SetColCount( nCols );
-            aLineEndSet.SetLineCount( nLines );
+            aLineEndSet->SetColCount( nCols );
+            aLineEndSet->SetLineCount( nLines );
 
             SetSize();
 
             Size aSize = GetOutputSizePixel();
             aSize.Width()  -= 4;
             aSize.Height() -= 4;
-            aLineEndSet.SetPosSizePixel( Point( 2, 2 ), aSize );
+            aLineEndSet->SetPosSizePixel( Point( 2, 2 ), aSize );
         }
         //SfxPopupWindow::Resize();
         mbInResize = false;
@@ -475,10 +480,10 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
     aBitmapSize.Width()  += 6;
     aBitmapSize.Height() += 6;
 
-    Size aItemSize = aLineEndSet.CalcItemSizePixel( aBitmapSize );  // -> Member
+    Size aItemSize = aLineEndSet->CalcItemSizePixel( aBitmapSize );  // -> Member
     //Size aOldSize = GetOutputSizePixel(); // for width
 
-    sal_uInt16 nItemCount = aLineEndSet.GetItemCount(); // -> Member
+    sal_uInt16 nItemCount = aLineEndSet->GetItemCount(); // -> Member
 
     // identify columns
     long nItemW = aItemSize.Width();
@@ -518,7 +523,7 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
 
 void SvxLineEndWindow::StartSelection()
 {
-    aLineEndSet.StartSelection();
+    aLineEndSet->StartSelection();
 }
 
 
@@ -541,7 +546,7 @@ void SvxLineEndWindow::StateChanged(
             pLineEndList = static_cast<const SvxLineEndListItem*>(pState)->GetLineEndList();
             DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
 
-            aLineEndSet.Clear();
+            aLineEndSet->Clear();
             FillValueSet();
 
             Size aSize = GetOutputSizePixel();
@@ -570,23 +575,23 @@ void SvxLineEndWindow::SetSize()
     //if( !bPopupMode )
     if( !IsInPopupMode() )
     {
-        sal_uInt16 nItemCount = aLineEndSet.GetItemCount(); // -> Member
+        sal_uInt16 nItemCount = aLineEndSet->GetItemCount(); // -> Member
         sal_uInt16 nMaxLines  = nItemCount / nCols; // -> Member ?
         if( nItemCount % nCols )
             nMaxLines++;
 
-        WinBits nBits = aLineEndSet.GetStyle();
+        WinBits nBits = aLineEndSet->GetStyle();
         if ( nLines == nMaxLines )
             nBits &= ~WB_VSCROLL;
         else
             nBits |= WB_VSCROLL;
-        aLineEndSet.SetStyle( nBits );
+        aLineEndSet->SetStyle( nBits );
     }
 
     Size aSize( aBmpSize );
     aSize.Width()  += 6;
     aSize.Height() += 6;
-    aSize = aLineEndSet.CalcWindowSizePixel( aSize );
+    aSize = aLineEndSet->CalcWindowSizePixel( aSize );
     aSize.Width()  += 4;
     aSize.Height() += 4;
     SetOutputSizePixel( aSize );
@@ -600,7 +605,7 @@ void SvxLineEndWindow::GetFocus (void)
     SfxPopupWindow::GetFocus();
     // Grab the focus to the line ends value set so that it can be controlled
     // with the keyboard.
-    aLineEndSet.GrabFocus();
+    aLineEndSet->GrabFocus();
 }
 
 SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) :

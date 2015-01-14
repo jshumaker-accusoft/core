@@ -153,7 +153,6 @@ private:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~LinePropertyPanel(void);
 
     PopupControl* CreateLineWidthPopupControl (PopupContainer* pParent);
 };

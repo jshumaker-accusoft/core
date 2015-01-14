@@ -196,12 +196,6 @@ LinePropertyPanel::LinePropertyPanel(
 
 
 
-LinePropertyPanel::~LinePropertyPanel()
-{
-}
-
-
-
 void LinePropertyPanel::Initialize()
 {
     mpIMGWidthIcon.reset(new Image[8]);

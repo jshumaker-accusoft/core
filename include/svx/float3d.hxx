@@ -69,118 +69,118 @@ private:
     VclPtr<ImageButton>         aBtnAssign;
 
 // geometry
-    FixedLine           aFLGeometrie;
-    FixedText           aFtPercentDiagonal;
-    MetricField         aMtrPercentDiagonal;
-    FixedText           aFtBackscale;
-    MetricField         aMtrBackscale;
-    FixedText           aFtEndAngle;
-    MetricField         aMtrEndAngle;
-    FixedText           aFtDepth;
-    MetricField         aMtrDepth;
-    FixedLine           aFLSegments;
+    VclPtr<FixedLine>           aFLGeometrie;
+    VclPtr<FixedText>           aFtPercentDiagonal;
+    VclPtr<MetricField>         aMtrPercentDiagonal;
+    VclPtr<FixedText>           aFtBackscale;
+    VclPtr<MetricField>         aMtrBackscale;
+    VclPtr<FixedText>           aFtEndAngle;
+    VclPtr<MetricField>         aMtrEndAngle;
+    VclPtr<FixedText>           aFtDepth;
+    VclPtr<MetricField>         aMtrDepth;
+    VclPtr<FixedLine>           aFLSegments;
 
-    FixedText           aFtHorizontal;
-    NumericField        aNumHorizontal;
-    FixedText           aFtVertical;
-    NumericField        aNumVertical;
-    FixedLine           aFLNormals;
+    VclPtr<FixedText>           aFtHorizontal;
+    VclPtr<NumericField>        aNumHorizontal;
+    VclPtr<FixedText>           aFtVertical;
+    VclPtr<NumericField>        aNumVertical;
+    VclPtr<FixedLine>           aFLNormals;
 
-    ImageButton         aBtnNormalsObj;
-    ImageButton         aBtnNormalsFlat;
-    ImageButton         aBtnNormalsSphere;
-    ImageButton         aBtnNormalsInvert;
-    ImageButton         aBtnTwoSidedLighting;
+    VclPtr<ImageButton>         aBtnNormalsObj;
+    VclPtr<ImageButton>         aBtnNormalsFlat;
+    VclPtr<ImageButton>         aBtnNormalsSphere;
+    VclPtr<ImageButton>         aBtnNormalsInvert;
+    VclPtr<ImageButton>         aBtnTwoSidedLighting;
 
-    ImageButton         aBtnDoubleSided;
-    FixedLine           aFLRepresentation;
+    VclPtr<ImageButton>         aBtnDoubleSided;
+    VclPtr<FixedLine>           aFLRepresentation;
 // presentation
-    FixedText           aFtShademode;
-    ListBox             aLbShademode;
-    FixedLine           aFLShadow;
-    ImageButton         aBtnShadow3d;
-    FixedText           aFtSlant;
-    MetricField         aMtrSlant;
-    FixedText           aFtDistance;
-    MetricField         aMtrDistance;
-    FixedText           aFtFocalLeng;
-    MetricField         aMtrFocalLength;
-    FixedLine           aFLCamera;
-    FixedLine           aFLLight;
+    VclPtr<FixedText>           aFtShademode;
+    VclPtr<ListBox>             aLbShademode;
+    VclPtr<FixedLine>           aFLShadow;
+    VclPtr<ImageButton>         aBtnShadow3d;
+    VclPtr<FixedText>           aFtSlant;
+    VclPtr<MetricField>         aMtrSlant;
+    VclPtr<FixedText>           aFtDistance;
+    VclPtr<MetricField>         aMtrDistance;
+    VclPtr<FixedText>           aFtFocalLeng;
+    VclPtr<MetricField>         aMtrFocalLength;
+    VclPtr<FixedLine>           aFLCamera;
+    VclPtr<FixedLine>           aFLLight;
 
 // lighting
-    ImageButton         aBtnLight1;
-    ImageButton         aBtnLight2;
-    ImageButton         aBtnLight3;
-    ImageButton         aBtnLight4;
-    ImageButton         aBtnLight5;
-    ImageButton         aBtnLight6;
-    ImageButton         aBtnLight7;
-    ImageButton         aBtnLight8;
-    FixedText           aFTLightsource;
-    ColorLB             aLbLight1;
-    ColorLB             aLbLight2;
-    ColorLB             aLbLight3;
-    ColorLB             aLbLight4;
-    ColorLB             aLbLight5;
-    ColorLB             aLbLight6;
-    ColorLB             aLbLight7;
-    ColorLB             aLbLight8;
+    VclPtr<ImageButton>         aBtnLight1;
+    VclPtr<ImageButton>         aBtnLight2;
+    VclPtr<ImageButton>         aBtnLight3;
+    VclPtr<ImageButton>         aBtnLight4;
+    VclPtr<ImageButton>         aBtnLight5;
+    VclPtr<ImageButton>         aBtnLight6;
+    VclPtr<ImageButton>         aBtnLight7;
+    VclPtr<ImageButton>         aBtnLight8;
+    VclPtr<FixedText>           aFTLightsource;
+    VclPtr<ColorLB>             aLbLight1;
+    VclPtr<ColorLB>             aLbLight2;
+    VclPtr<ColorLB>             aLbLight3;
+    VclPtr<ColorLB>             aLbLight4;
+    VclPtr<ColorLB>             aLbLight5;
+    VclPtr<ColorLB>             aLbLight6;
+    VclPtr<ColorLB>             aLbLight7;
+    VclPtr<ColorLB>             aLbLight8;
 
-    ImageButton         aBtnLightColor;
+    VclPtr<ImageButton>         aBtnLightColor;
 
     // #99694# Keyboard shortcuts activate the next control, so the
     // order needed to be changed here
-    FixedText           aFTAmbientlight;    // Text label
-    ColorLB             aLbAmbientlight;    // ListBox
-    ImageButton         aBtnAmbientColor;   // color button
+    VclPtr<FixedText>           aFTAmbientlight;    // Text label
+    VclPtr<ColorLB>             aLbAmbientlight;    // ListBox
+    VclPtr<ImageButton>         aBtnAmbientColor;   // color button
 
-    FixedLine           aFLTexture;
+    VclPtr<FixedLine>           aFLTexture;
 
 // Textures
-    FixedText           aFtTexKind;
-    ImageButton         aBtnTexLuminance;
-    ImageButton         aBtnTexColor;
-    FixedText           aFtTexMode;
-    ImageButton         aBtnTexReplace;
-    ImageButton         aBtnTexModulate;
-    ImageButton         aBtnTexBlend;
-    FixedText           aFtTexProjectionX;
-    ImageButton         aBtnTexObjectX;
-    ImageButton         aBtnTexParallelX;
-    ImageButton         aBtnTexCircleX;
-    FixedText           aFtTexProjectionY;
-    ImageButton         aBtnTexObjectY;
-    ImageButton         aBtnTexParallelY;
-    ImageButton         aBtnTexCircleY;
-    FixedText           aFtTexFilter;
-    ImageButton         aBtnTexFilter;
+    VclPtr<FixedText>           aFtTexKind;
+    VclPtr<ImageButton>         aBtnTexLuminance;
+    VclPtr<ImageButton>         aBtnTexColor;
+    VclPtr<FixedText>           aFtTexMode;
+    VclPtr<ImageButton>         aBtnTexReplace;
+    VclPtr<ImageButton>         aBtnTexModulate;
+    VclPtr<ImageButton>         aBtnTexBlend;
+    VclPtr<FixedText>           aFtTexProjectionX;
+    VclPtr<ImageButton>         aBtnTexObjectX;
+    VclPtr<ImageButton>         aBtnTexParallelX;
+    VclPtr<ImageButton>         aBtnTexCircleX;
+    VclPtr<FixedText>           aFtTexProjectionY;
+    VclPtr<ImageButton>         aBtnTexObjectY;
+    VclPtr<ImageButton>         aBtnTexParallelY;
+    VclPtr<ImageButton>         aBtnTexCircleY;
+    VclPtr<FixedText>           aFtTexFilter;
+    VclPtr<ImageButton>         aBtnTexFilter;
 
 // material
 // material editor
-    FixedLine           aFLMaterial;
-    FixedText           aFtMatFavorites;
-    ListBox             aLbMatFavorites;
-    FixedText           aFtMatColor;
-    ColorLB             aLbMatColor;
-    ImageButton         aBtnMatColor;
-    FixedText           aFtMatEmission;
-    ColorLB             aLbMatEmission;
-    ImageButton         aBtnEmissionColor;
-    FixedLine           aFLMatSpecular;
-    FixedText           aFtMatSpecular;
-    ColorLB             aLbMatSpecular;
-    ImageButton         aBtnSpecularColor;
-    FixedText           aFtMatSpecularIntensity;
-    MetricField         aMtrMatSpecularIntensity;
+    VclPtr<FixedLine>           aFLMaterial;
+    VclPtr<FixedText>           aFtMatFavorites;
+    VclPtr<ListBox>             aLbMatFavorites;
+    VclPtr<FixedText>           aFtMatColor;
+    VclPtr<ColorLB>             aLbMatColor;
+    VclPtr<ImageButton>         aBtnMatColor;
+    VclPtr<FixedText>           aFtMatEmission;
+    VclPtr<ColorLB>             aLbMatEmission;
+    VclPtr<ImageButton>         aBtnEmissionColor;
+    VclPtr<FixedLine>           aFLMatSpecular;
+    VclPtr<FixedText>           aFtMatSpecular;
+    VclPtr<ColorLB>             aLbMatSpecular;
+    VclPtr<ImageButton>         aBtnSpecularColor;
+    VclPtr<FixedText>           aFtMatSpecularIntensity;
+    VclPtr<MetricField>         aMtrMatSpecularIntensity;
 
-    Svx3DPreviewControl aCtlPreview;
-    SvxLightCtl3D       aCtlLightPreview;
+    VclPtr<Svx3DPreviewControl> aCtlPreview;
+    VclPtr<SvxLightCtl3D>       aCtlLightPreview;
 
 // bottom part
-    ImageButton         aBtnConvertTo3D;
-    ImageButton         aBtnLatheObject;
-    ImageButton         aBtnPerspective;
+    VclPtr<ImageButton>         aBtnConvertTo3D;
+    VclPtr<ImageButton>         aBtnLatheObject;
+    VclPtr<ImageButton>         aBtnPerspective;
 
 // the rest ...
     Image               aImgLightOn;
