@@ -167,7 +167,7 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
             {
                 // new module window
                 if (!pModulLayout)
-                    pModulLayout.reset(new ModulWindowLayout(&GetViewFrame()->GetWindow(), aObjectCatalog));
+                    pModulLayout.reset(new ModulWindowLayout(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
                 pWin = new ModulWindow(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
                 nKey = InsertWindowInTable( pWin );
             }
@@ -196,7 +196,7 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
     pTabBar->Sort();
     if(pWin)
     {
-        pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
+        pWin->GrabScrollBars( aHScrollBar.get(), aVScrollBar.get() );
         if ( !pCurWin )
             SetCurWindow( pWin, false, false );
     }

@@ -160,6 +160,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCheckBox(vcl::Window *
 
 CheckBox::~CheckBox()
 {
+    dispose();
+}
+
+void CheckBox::dispose()
+{
     delete pCheckButton;
 
     // delete user data
@@ -169,6 +174,7 @@ CheckBox::~CheckBox()
         delete static_cast<LibUserData*>(pEntry->GetUserData());
         pEntry = Next( pEntry );
     }
+    SvTabListBox::dispose();
 }
 
 void CheckBox::Init()
@@ -475,12 +481,18 @@ LibPage::LibPage(vcl::Window * pParent)
 
 LibPage::~LibPage()
 {
+    dispose();
+}
+
+void LibPage::dispose()
+{
     sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         DocumentEntry* pEntry = (DocumentEntry*)m_pBasicsBox->GetEntryData( i );
         delete pEntry;
     }
+    TabPage::dispose();
 }
 
 void LibPage::CheckButtons()
