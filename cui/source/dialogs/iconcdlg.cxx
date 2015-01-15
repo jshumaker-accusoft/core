@@ -53,10 +53,6 @@ IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
 
 
 
-IconChoicePage::~IconChoicePage()
-{
-}
-
 /**********************************************************************
 |
 | Activate / Deaktivate
@@ -228,6 +224,11 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
+    dispose();
+}
+
+void IconChoiceDialog::dispose()
+{
     // save configuration at INI-Manager
     // and remove pages
     //SvtViewOptions aTabDlgOpt( E_TABDIALOG, rId );
@@ -267,6 +268,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
 
     delete pRanges;
     delete pOutSet;
+    ModalDialog::dispose();
 }
 
 /**********************************************************************

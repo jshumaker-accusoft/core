@@ -61,7 +61,6 @@ private:
 public:
 
     SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
-    virtual ~SvxConnectionPage();
 
     static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
@@ -81,7 +80,6 @@ class SvxConnectionDialog : public SfxSingleTabDialog
 public:
     SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet& rAttr,
                        const SdrView* pView );
-    virtual ~SvxConnectionDialog();
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CONNECT_HXX

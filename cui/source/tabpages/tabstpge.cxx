@@ -187,12 +187,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet
 
 
 
-SvxTabulatorTabPage::~SvxTabulatorTabPage()
-{
-}
-
-
-
 const sal_uInt16* SvxTabulatorTabPage::GetRanges()
 {
     return pRanges;

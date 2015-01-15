@@ -65,7 +65,6 @@ protected:
 
 public:
     SvxGeneralTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxGeneralTabPage ();
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

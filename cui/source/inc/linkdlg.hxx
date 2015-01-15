@@ -92,7 +92,6 @@ class SvBaseLinksDlg : public ModalDialog
 
 public:
     SvBaseLinksDlg( vcl::Window * pParent, sfx2::LinkManager*, bool bHtml = false );
-    virtual ~SvBaseLinksDlg();
     void SetActLink( sfx2::SvBaseLink * pLink );
 };
 

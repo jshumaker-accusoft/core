@@ -90,7 +90,6 @@ protected :
     sal_uInt16              GetWhich( sal_uInt16 nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
 
 public :
-    virtual             ~IconChoicePage();
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 
@@ -185,6 +184,7 @@ public :
     IconChoiceDialog ( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
                        const SfxItemSet * pItemSet = 0 );
     virtual ~IconChoiceDialog ();
+    virtual void dispose() SAL_OVERRIDE;
 
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(

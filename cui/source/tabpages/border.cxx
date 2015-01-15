@@ -336,12 +336,6 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
 
 
 
-SvxBorderTabPage::~SvxBorderTabPage()
-{
-}
-
-
-
 const sal_uInt16* SvxBorderTabPage::GetRanges()
 {
     return pRanges;

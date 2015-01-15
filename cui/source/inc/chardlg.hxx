@@ -53,8 +53,6 @@ protected:
 
     SvxCharBasePage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset);
 
-    virtual             ~SvxCharBasePage();
-
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
     void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
 
@@ -151,6 +149,7 @@ public:
 
 public:
                         virtual ~SvxCharNamePage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
@@ -211,7 +210,6 @@ private:
     OUString            m_aTransparentColorName;
 
                         SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& rSet );
-                        virtual ~SvxCharEffectsPage();
 
     void                Initialize();
     void                UpdatePreview_Impl();
@@ -285,7 +283,6 @@ private:
     sal_uInt8                m_nSubProp;
 
                         SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet& rSet );
-                        virtual ~SvxCharPositionPage();
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -335,7 +332,6 @@ private:
     sal_uInt16              m_nEndBracketPosition;
 
     SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SvxCharTwoLinesPage();
 
     void                UpdatePreview_Impl();
     void                Initialize();

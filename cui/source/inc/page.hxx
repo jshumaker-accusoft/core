@@ -195,6 +195,7 @@ public:
     virtual void        FillUserData() SAL_OVERRIDE;
 
     virtual ~SvxPageDescPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetMode( SvxModeType eMType ) { eMode = eMType; }
     void                SetPaperFormatRanges( Paper eStart, Paper eEnd )

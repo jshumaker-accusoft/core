@@ -654,10 +654,6 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( vcl::Window* pParent,  const Sfx
     setPreviewsToSamePlace(pParent, this);
 }
 
-SvxStdParagraphTabPage::~SvxStdParagraphTabPage()
-{
-}
-
 void SvxStdParagraphTabPage::EnableNegativeMode()
 {
     m_pLeftIndent->SetMin(-9999);
@@ -1019,10 +1015,6 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
     }
 
     setPreviewsToSamePlace(pParent, this);
-}
-
-SvxParaAlignTabPage::~SvxParaAlignTabPage()
-{
 }
 
 int SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1909,10 +1901,6 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( vcl::Window* pParent, const SfxI
     }
 }
 
-SvxExtParagraphTabPage::~SvxExtParagraphTabPage()
-{
-}
-
 const sal_uInt16* SvxExtParagraphTabPage::GetRanges()
 {
     return pExtRanges;
@@ -2118,10 +2106,6 @@ SvxAsianTabPage::SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     m_pScriptSpaceCB->SetClickHdl( aLink );
     m_pForbiddenRulesCB->SetClickHdl( aLink );
 
-}
-
-SvxAsianTabPage::~SvxAsianTabPage()
-{
 }
 
 SfxTabPage* SvxAsianTabPage::Create(    vcl::Window* pParent, const SfxItemSet* rSet )

@@ -245,6 +245,11 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
 
 SpellDialog::~SpellDialog()
 {
+    dispose();
+}
+
+void SpellDialog::dispose()
+{
     // save possibly modified user-dictionaries
     Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
@@ -253,6 +258,7 @@ SpellDialog::~SpellDialog()
     }
 
     delete pImpl;
+    SfxModelessDialog::dispose();
 }
 
 
@@ -1198,9 +1204,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSentenceEditWindow(vcl
 }
 
 
-SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
-{
-}
 /*-------------------------------------------------------------------------
     The selection before inputting a key may have a range or not
     and it may be inside or outside of field or error attributes.

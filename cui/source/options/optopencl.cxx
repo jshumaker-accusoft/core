@@ -67,10 +67,6 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 }
 
-SvxOpenCLTabPage::~SvxOpenCLTabPage()
-{
-}
-
 SfxTabPage*
 SvxOpenCLTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {

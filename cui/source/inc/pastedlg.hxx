@@ -55,7 +55,6 @@ class SvPasteObjectDialog : public ModalDialog
 
 public:
                 SvPasteObjectDialog( vcl::Window* pParent );
-                virtual ~SvPasteObjectDialog();
 
     void        Insert( SotFormatStringId nFormat, const OUString & rFormatName );
     void        SetObjName( const SvGlobalName & rClass, const OUString & rObjName );

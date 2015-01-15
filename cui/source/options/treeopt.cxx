@@ -549,6 +549,11 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( vcl::Window* pParent, const OUString
 
 OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 {
+   dispose();
+}
+
+void OfaTreeOptionsDialog::dispose()
+{
     pCurrentPageEntry = NULL;
     SvTreeListEntry* pEntry = pTreeLB->First();
     // first children
@@ -602,6 +607,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
     }
     delete pColorPageItemSet;
     deleteGroupNames();
+    SfxModalDialog::dispose();
 }
 
 OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
@@ -2154,6 +2160,11 @@ ExtensionsTabPage::ExtensionsTabPage(
 
 ExtensionsTabPage::~ExtensionsTabPage()
 {
+    dispose();
+}
+
+void ExtensionsTabPage::dispose()
+{
     Hide();
     DeactivatePage();
 
@@ -2172,6 +2183,7 @@ ExtensionsTabPage::~ExtensionsTabPage()
         }
         m_xPage.clear();
     }
+    TabPage::dispose();
 }
 
 

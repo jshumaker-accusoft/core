@@ -62,7 +62,6 @@ private:
 
 public:
     SvxOpenCLTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxOpenCLTabPage();
 
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 

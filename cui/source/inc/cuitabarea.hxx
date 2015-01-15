@@ -76,7 +76,6 @@ protected:
 
 public:
     SvxAreaTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
-    virtual ~SvxAreaTabDialog();
 
     void                SetNewColorList( XColorListRef pColTab )
                             { mpNewColorList = pColTab; }
@@ -596,6 +595,7 @@ private:
 public:
     SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxBitmapTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
@@ -730,6 +730,7 @@ private:
 public:
     SvxColorTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxColorTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 

@@ -77,6 +77,7 @@ public:
                               ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
                     SFTreeListBox(vcl::Window* pParent);
                     virtual ~SFTreeListBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            ExpandAllTrees();
 
@@ -179,6 +180,7 @@ public:
                     // to specify the language or provider
                     SvxScriptOrgDialog( vcl::Window* pParent, const OUString& language );
                     virtual ~SvxScriptOrgDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual short   Execute() SAL_OVERRIDE;
 

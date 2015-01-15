@@ -312,6 +312,7 @@ class ColorFieldControl : public Control
 public:
     ColorFieldControl( vcl::Window* pParent, const WinBits& nStyle );
     virtual ~ColorFieldControl();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -362,7 +363,13 @@ ColorFieldControl::ColorFieldControl( vcl::Window* pParent, const WinBits& nStyl
 
 ColorFieldControl::~ColorFieldControl()
 {
+    dispose();
+}
+
+void ColorFieldControl::dispose()
+{
     delete mpBitmap;
+    Control::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorFieldControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
@@ -705,6 +712,7 @@ class ColorSliderControl : public Control
 public:
     ColorSliderControl( vcl::Window* pParent, const WinBits& nStyle );
     virtual ~ColorSliderControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -747,7 +755,13 @@ ColorSliderControl::ColorSliderControl( vcl::Window* pParent, const WinBits& nSt
 
 ColorSliderControl::~ColorSliderControl()
 {
+    dispose();
+}
+
+void ColorSliderControl::dispose()
+{
     delete mpBitmap;
+    Control::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorSliderControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
