@@ -262,6 +262,11 @@ void OTableEditorCtrl::ClearModified()
 
 OTableEditorCtrl::~OTableEditorCtrl()
 {
+    dispose();
+}
+
+void OTableEditorCtrl::dispose()
+{
     // Reset the Undo-Manager
     GetUndoManager().Clear();
 
@@ -282,6 +287,7 @@ OTableEditorCtrl::~OTableEditorCtrl()
     delete pTypeCell;
     delete pDescrCell;
     delete pHelpTextCell;
+    OTableRowView::dispose();
 }
 
 bool OTableEditorCtrl::SetDataPtr( long nRow )

@@ -2488,7 +2488,7 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
                                     OQueryController& _rController,
                                     const Reference< XComponentContext >& _rxContext)
     :OQueryView( _pParent, _rController, _rxContext )
-    ,m_aSplitter( this )
+    ,m_aSplitter( new Splitter(this) )
     ,m_eChildFocus(NONE)
     ,m_bInSplitHandler( false )
 {
@@ -2508,18 +2508,24 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     setNoneVisbleRow(static_cast<OQueryController&>(getController()).getVisibleRows());
     m_pSelectionBox->Show();
     // setup Splitter
-    m_aSplitter.SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
-    m_aSplitter.Show();
+    m_aSplitter->SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
+    m_aSplitter->Show();
 
 }
 
 OQueryDesignView::~OQueryDesignView()
 {
+    dispose();
+}
+
+void OQueryDesignView::dispose()
+{
     if ( m_pTableView )
         ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     boost::scoped_ptr<vcl::Window> aTemp(m_pSelectionBox);
     m_pSelectionBox = NULL;
-
+    m_aSplitter.disposeAndClear();
+    OQueryView::dispose();
 }
 
 IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
@@ -2527,8 +2533,8 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
     if (!getController().isReadOnly())
     {
         m_bInSplitHandler = true;
-        m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
-        static_cast<OQueryController&>(getController()).setSplitPos(m_aSplitter.GetSplitPosPixel());
+        m_aSplitter->SetPosPixel( Point( m_aSplitter->GetPosPixel().X(),m_aSplitter->GetSplitPosPixel() ) );
+        static_cast<OQueryController&>(getController()).setSplitPos(m_aSplitter->GetSplitPosPixel());
         static_cast<OQueryController&>(getController()).setModified( sal_True );
         Resize();
         m_bInSplitHandler = true;
@@ -2547,8 +2553,8 @@ void OQueryDesignView::initialize()
 {
     if(static_cast<OQueryController&>(getController()).getSplitPos() != -1)
     {
-        m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),static_cast<OQueryController&>(getController()).getSplitPos() ) );
-        m_aSplitter.SetSplitPosPixel(static_cast<OQueryController&>(getController()).getSplitPos());
+        m_aSplitter->SetPosPixel( Point( m_aSplitter->GetPosPixel().X(),static_cast<OQueryController&>(getController()).getSplitPos() ) );
+        m_aSplitter->SetSplitPosPixel(static_cast<OQueryController&>(getController()).getSplitPos());
     }
     m_pSelectionBox->initialize();
     reset();
@@ -2569,7 +2575,7 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
         {
             // let the selection browse box determine an optimal size
             Size aSelectionBoxSize = m_pSelectionBox->CalcOptimalSize( aPlaygroundSize );
-            nSplitPos = aPlaygroundSize.Height() - aSelectionBoxSize.Height() - m_aSplitter.GetSizePixel().Height();
+            nSplitPos = aPlaygroundSize.Height() - aSelectionBoxSize.Height() - m_aSplitter->GetSizePixel().Height();
             // still an invalid size?
             if ( nSplitPos == -1 || nSplitPos >= aPlaygroundSize.Height() )
                 nSplitPos = sal_Int32(aPlaygroundSize.Height()*0.6);
@@ -2584,13 +2590,13 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
             if ( aSelBoxSize.Height() )
             {
                 // keep the size of the sel box constant
-                nSplitPos = aPlaygroundSize.Height() - m_aSplitter.GetSizePixel().Height() - aSelBoxSize.Height();
+                nSplitPos = aPlaygroundSize.Height() - m_aSplitter->GetSizePixel().Height() - aSelBoxSize.Height();
 
                 // and if the box is smaller than the optimal size, try to do something about it
                 Size aSelBoxOptSize = m_pSelectionBox->CalcOptimalSize( aPlaygroundSize );
                 if ( aSelBoxOptSize.Height() > aSelBoxSize.Height() )
                 {
-                    nSplitPos = aPlaygroundSize.Height() - m_aSplitter.GetSizePixel().Height() - aSelBoxOptSize.Height();
+                    nSplitPos = aPlaygroundSize.Height() - m_aSplitter->GetSizePixel().Height() - aSelBoxOptSize.Height();
                 }
 
                 static_cast< OQueryController& >(getController()).setSplitPos( nSplitPos );
@@ -2600,7 +2606,7 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
 
     // normalize the split pos
     Point   aSplitPos       = Point( _rPlayground.Left(), nSplitPos );
-    Size    aSplitSize      = Size( _rPlayground.GetSize().Width(), m_aSplitter.GetSizePixel().Height() );
+    Size    aSplitSize      = Size( _rPlayground.GetSize().Width(), m_aSplitter->GetSizePixel().Height() );
 
     if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aPlaygroundSize.Height() ))
         aSplitPos.Y() = aPlaygroundSize.Height() - aSplitSize.Height();
@@ -2617,8 +2623,8 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
     m_pSelectionBox->SetPosSizePixel( aPos, Size( aPlaygroundSize.Width(), aPlaygroundSize.Height() - aSplitSize.Height() - aTableViewSize.Height() ));
 
     // set the size of the splitter
-    m_aSplitter.SetPosSizePixel( aSplitPos, aSplitSize );
-    m_aSplitter.SetDragRectPixel( _rPlayground );
+    m_aSplitter->SetPosSizePixel( aSplitPos, aSplitSize );
+    m_aSplitter->SetDragRectPixel( _rPlayground );
 
     // just for completeness: there is no space left, we occupied it all ...
     _rPlayground.SetPos( _rPlayground.BottomRight() );
@@ -2991,8 +2997,8 @@ void OQueryDesignView::SaveUIConfig()
     OQueryController& rCtrl = static_cast<OQueryController&>(getController());
     rCtrl.SaveTabWinsPosSize( &m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar().GetThumbPos(), m_pScrollWindow->GetVScrollBar().GetThumbPos() );
     rCtrl.setVisibleRows( m_pSelectionBox->GetNoneVisibleRows() );
-    if ( m_aSplitter.GetSplitPosPixel() != 0 )
-        rCtrl.setSplitPos( m_aSplitter.GetSplitPosPixel() );
+    if ( m_aSplitter->GetSplitPosPixel() != 0 )
+        rCtrl.setSplitPos( m_aSplitter->GetSplitPosPixel() );
 }
 
 OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pEntry,

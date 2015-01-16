@@ -39,6 +39,7 @@ namespace dbaui
     public:
         OSplitterView(vcl::Window* _pParent,bool _bVertical = true);
         virtual ~OSplitterView();
+        virtual void dispose() SAL_OVERRIDE;
         // window overloads
         virtual void GetFocus() SAL_OVERRIDE;
 
