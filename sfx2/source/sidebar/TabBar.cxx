@@ -71,6 +71,7 @@ TabBar::TabBar (
 
 TabBar::~TabBar()
 {
+    dispose();
 }
 
 void TabBar::dispose()
