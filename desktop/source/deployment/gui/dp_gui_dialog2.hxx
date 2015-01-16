@@ -140,6 +140,7 @@ class ExtMgrDialog : public ModelessDialog,
 public:
                     ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager );
     virtual        ~ExtMgrDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
@@ -211,6 +212,7 @@ class UpdateRequiredDialog : public ModalDialog,
 public:
                     UpdateRequiredDialog( vcl::Window * pParent, TheExtensionManager *pManager );
     virtual        ~UpdateRequiredDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual short   Execute() SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;

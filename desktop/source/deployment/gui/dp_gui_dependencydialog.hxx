@@ -38,8 +38,6 @@ public:
     DependencyDialog(
         vcl::Window * parent, std::vector< OUString > const & dependencies);
 
-    virtual ~DependencyDialog();
-
 private:
     DependencyDialog(DependencyDialog &); // not defined
     void operator =(DependencyDialog &); // not defined
