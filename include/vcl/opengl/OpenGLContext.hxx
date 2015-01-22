@@ -63,7 +63,7 @@ class NSOpenGLView;
 class OpenGLFramebuffer;
 class OpenGLProgram;
 class OpenGLTexture;
-class SalGraphicsImpl;
+class OpenGLSalGraphicsImpl;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -195,8 +195,8 @@ public:
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
 #ifdef DBG_UTIL
-    void AddRef(SalGraphicsImpl*);
-    void DeRef(SalGraphicsImpl*);
+    void AddRef(OpenGLSalGraphicsImpl*);
+    void DeRef(OpenGLSalGraphicsImpl*);
 #else
     void AddRef();
     void DeRef();
@@ -279,7 +279,7 @@ private:
     boost::ptr_map<ProgramKey, OpenGLProgram> maPrograms;
     OpenGLProgram* mpCurrentProgram;
 #ifdef DBG_UTIL
-    std::set<SalGraphicsImpl*> maParents;
+    std::set<OpenGLSalGraphicsImpl*> maParents;
 #endif
 
 public:
