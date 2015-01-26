@@ -300,6 +300,8 @@ ImplGrafControl::~ImplGrafControl()
 
 void ImplGrafControl::dispose()
 {
+    maImage.disposeAndClear();
+    maField.disposeAndClear();
     Control::dispose();
 }
 
