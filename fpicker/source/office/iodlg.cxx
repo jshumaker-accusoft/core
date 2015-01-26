@@ -399,6 +399,11 @@ public:
 
 SvtFileDialog::~SvtFileDialog()
 {
+    dispose();
+}
+
+void SvtFileDialog::dispose()
+{
     if ( !_pImp->_aIniKey.isEmpty() )
     {
         // save window state
@@ -436,6 +441,7 @@ SvtFileDialog::~SvtFileDialog()
     delete _pSplitter;
     delete _pContainer;
     delete _pPrevBmp;
+    ModalDialog::dispose();
 }
 
 void SvtFileDialog::Init_Impl
