@@ -205,6 +205,7 @@ public:
                                ScViewData*      ptrViewData);
 
                     virtual ~ScAcceptChgDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            ReInit(ScViewData* ptrViewData);
 

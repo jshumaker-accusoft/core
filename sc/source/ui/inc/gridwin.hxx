@@ -307,6 +307,7 @@ public:
 
     ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
     virtual ~ScGridWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     // #i70788# flush and get overlay
     rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager();

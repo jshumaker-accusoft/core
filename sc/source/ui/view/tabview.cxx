@@ -192,13 +192,13 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     pHdrSelEng( NULL ),
     aHdrFunc( &aViewData ),
     pDrawView( NULL ),
-    aVScrollTop( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ),
-    aVScrollBottom( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ),
-    aHScrollLeft( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ),
-    aHScrollRight( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ),
-    aCornerButton( pFrameWin, &aViewData, false ),
-    aTopButton( pFrameWin, &aViewData, true ),
-    aScrollBarBox( pFrameWin, WB_SIZEABLE ),
+    aVScrollTop( new ScrollBar( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
+    aVScrollBottom( new ScrollBar( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
+    aHScrollLeft( new ScrollBar( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
+    aHScrollRight( new ScrollBar( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
+    aCornerButton( new ScCornerButton( pFrameWin, &aViewData, false ) ),
+    aTopButton( new ScCornerButton( pFrameWin, &aViewData, true ) ),
+    aScrollBarBox( new ScrollBarBox( pFrameWin, WB_SIZEABLE ) ),
     mpInputHintWindow( NULL ),
     pPageBreakData( NULL ),
     pBrushDocument( NULL ),
@@ -382,7 +382,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         }
 
         //  window at the bottom right
-        lcl_SetPosSize( aScrollBarBox, Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
+        lcl_SetPosSize( *aScrollBarBox.get(), Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
                         nTotalWidth, bLayoutRTL );
 
         if (bHScroll)                               // Scrollbars horizontal
@@ -425,7 +425,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
             Point aHScrollLeftPoint(nPosX - nOverlap, nPosY + nSizeY);
             Size aHScrollLeftSize(nSizeLt + 2 * nOverlap, nScrollBarSize);
-            lcl_SetPosSize( aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL );
+            lcl_SetPosSize( *aHScrollLeft.get(), aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL );
 
             Point aHSplitterPoint(nPosX + nSizeLt, nPosY + nSizeY);
             Size aHSplitterSize(nSizeSp, nScrollBarSize);
@@ -434,7 +434,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             Point aHScrollRightPoint(nPosX + nSizeLt + nSizeSp - nOverlap, nPosY + nSizeY);
             Size aHScrollRightSize(nSizeRt + 2 * nOverlap, nScrollBarSize);
 
-            lcl_SetPosSize( aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL );
+            lcl_SetPosSize( *aHScrollRight.get(), aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL );
 
             //  SetDragRectPixel is done below
         }
@@ -462,11 +462,11 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             }
             nSizeDn = nSizeY - nSizeUp - nSizeSp;
 
-            lcl_SetPosSize( aVScrollTop, Point(nPosX+nSizeX, nPosY-nOverlap),
+            lcl_SetPosSize( *aVScrollTop.get(), Point(nPosX+nSizeX, nPosY-nOverlap),
                                             Size(nBarX,nSizeUp+2*nOverlap), nTotalWidth, bLayoutRTL );
             lcl_SetPosSize( *pVSplitter, Point( nPosX+nSizeX, nPosY+nSizeUp ),
                                             Size( nBarX, nSizeSp ), nTotalWidth, bLayoutRTL );
-            lcl_SetPosSize( aVScrollBottom, Point(nPosX+nSizeX,
+            lcl_SetPosSize( *aVScrollBottom.get(), Point(nPosX+nSizeX,
                                                 nPosY+nSizeUp+nSizeSp-nOverlap),
                                             Size(nBarX, nSizeDn+2*nOverlap), nTotalWidth, bLayoutRTL );
 
@@ -484,8 +484,8 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
     if (bTabControl && ! bHScroll )
     {
-        nBarY = aHScrollLeft.GetSizePixel().Height();
-        nBarX = aVScrollBottom.GetSizePixel().Width();
+        nBarY = aHScrollLeft->GetSizePixel().Height();
+        nBarX = aVScrollBottom->GetSizePixel().Width();
 
         long nSize1 = nSizeX + nOverlap;
 
@@ -495,14 +495,14 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         lcl_SetPosSize( *pTabControl, Point(nPosX-nOverlap, nPosY+nSizeY-nBarY),
                                         Size(nTabSize+nOverlap, nBarY), nTotalWidth, bLayoutRTL );
         nSizeY -= nBarY - nOverlap;
-        lcl_SetPosSize( aScrollBarBox, Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
+        lcl_SetPosSize( *aScrollBarBox.get(), Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
                                         nTotalWidth, bLayoutRTL );
 
         if( bVScroll )
         {
-            Size aVScrSize = aVScrollBottom.GetSizePixel();
+            Size aVScrSize = aVScrollBottom->GetSizePixel();
             aVScrSize.Height() -= nBarY;
-            aVScrollBottom.SetSizePixel( aVScrSize );
+            aVScrollBottom->SetSizePixel( aVScrSize );
         }
     }
 
@@ -551,7 +551,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         {
             //  Fixier-Splitter nicht mit Scrollbar/TabBar ueberlappen lassen
             if ( bHScroll )
-                nSplitHeight -= aHScrollLeft.GetSizePixel().Height();
+                nSplitHeight -= aHScrollLeft->GetSizePixel().Height();
             else if ( bTabControl && pTabControl )
                 nSplitHeight -= pTabControl->GetSizePixel().Height();
         }
@@ -567,7 +567,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     {
         long nSplitWidth = rSize.Width();
         if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX && bVScroll )
-            nSplitWidth -= aVScrollBottom.GetSizePixel().Width();
+            nSplitWidth -= aVScrollBottom->GetSizePixel().Width();
         nSplitPosY = aViewData.GetVSplitPos();
         lcl_SetPosSize( *pVSplitter,
             Point( nOutPosX, nSplitPosY ), Size( nSplitWidth, nSplitSizeY ), nTotalWidth, bLayoutRTL );
@@ -616,11 +616,11 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     }
     if (bHOutline && bVOutline)
     {
-        lcl_SetPosSize( aTopButton, Point(nOutPosX,nOutPosY), Size(nOutlineX,nOutlineY), nTotalWidth, bLayoutRTL );
-        aTopButton.Show();
+        lcl_SetPosSize( *aTopButton.get(), Point(nOutPosX,nOutPosY), Size(nOutlineX,nOutlineY), nTotalWidth, bLayoutRTL );
+        aTopButton->Show();
     }
     else
-        aTopButton.Hide();
+        aTopButton->Hide();
 
     if (bHeaders)                               // Spalten/Zeilen-Header
     {
@@ -636,14 +636,14 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         lcl_SetPosSize( *pRowBar[SC_SPLIT_BOTTOM],
             Point(nPosX-nBarX,nSplitPosY), Size(nBarX,nBottomSize), nTotalWidth, bLayoutRTL );
 
-        lcl_SetPosSize( aCornerButton, Point(nPosX-nBarX,nPosY-nBarY), Size(nBarX,nBarY), nTotalWidth, bLayoutRTL );
-        aCornerButton.Show();
+        lcl_SetPosSize( *aCornerButton.get(), Point(nPosX-nBarX,nPosY-nBarY), Size(nBarX,nBarY), nTotalWidth, bLayoutRTL );
+        aCornerButton->Show();
         pColBar[SC_SPLIT_LEFT]->Show();
         pRowBar[SC_SPLIT_BOTTOM]->Show();
     }
     else
     {
-        aCornerButton.Hide();
+        aCornerButton->Hide();
         pColBar[SC_SPLIT_LEFT]->Hide();         // immer da
         pRowBar[SC_SPLIT_BOTTOM]->Hide();
     }
@@ -766,8 +766,8 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
 
     if (bScrollBars)                            // Scrollbars horizontal oder vertikal
     {
-        rBorder.Right()  += aVScrollBottom.GetSizePixel().Width();
-        rBorder.Bottom() += aHScrollLeft.GetSizePixel().Height();
+        rBorder.Right()  += aVScrollBottom->GetSizePixel().Width();
+        rBorder.Bottom() += aHScrollLeft->GetSizePixel().Height();
     }
 
     // Outline-Controls
@@ -959,8 +959,8 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     {
         ScHSplitPos eHPos = WhichH(ePos);
         ScVSplitPos eVPos = WhichV(ePos);
-        ScrollBar* pHScroll = ( eHPos == SC_SPLIT_LEFT ) ? &aHScrollLeft : &aHScrollRight;
-        ScrollBar* pVScroll = ( eVPos == SC_SPLIT_TOP )  ? &aVScrollTop  : &aVScrollBottom;
+        ScrollBar* pHScroll = ( eHPos == SC_SPLIT_LEFT ) ? aHScrollLeft.get() : aHScrollRight.get();
+        ScrollBar* pVScroll = ( eVPos == SC_SPLIT_TOP )  ? aVScrollTop.get()  : aVScrollBottom.get();
         if ( pGridWin[ePos] )
             bDone = pGridWin[ePos]->HandleScrollCommand( rCEvt, pHScroll, pVScroll );
     }
@@ -979,13 +979,13 @@ IMPL_LINK_NOARG(ScTabView, EndScrollHdl)
 
 IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 {
-    bool bHoriz = ( pScroll == &aHScrollLeft || pScroll == &aHScrollRight );
+    bool bHoriz = ( pScroll == aHScrollLeft.get() || pScroll == aHScrollRight.get() );
     long nViewPos;
     if ( bHoriz )
-        nViewPos = aViewData.GetPosX( (pScroll == &aHScrollLeft) ?
+        nViewPos = aViewData.GetPosX( (pScroll == aHScrollLeft.get()) ?
                                         SC_SPLIT_LEFT : SC_SPLIT_RIGHT );
     else
-        nViewPos = aViewData.GetPosY( (pScroll == &aVScrollTop) ?
+        nViewPos = aViewData.GetPosY( (pScroll == aVScrollTop.get()) ?
                                         SC_SPLIT_TOP : SC_SPLIT_BOTTOM );
 
     bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
@@ -1022,9 +1022,9 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
             // get scrollbar scroll position for help text (row number/column name)
             long nScrollMin = 0;        // RangeMin simulieren
-            if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == &aHScrollRight )
+            if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == aHScrollRight.get() )
                 nScrollMin = aViewData.GetFixPosX();
-            if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
+            if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == aVScrollBottom.get() )
                 nScrollMin = aViewData.GetFixPosY();
             long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
 
@@ -1067,17 +1067,17 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
             nDelta = 1;
             break;
         case SCROLL_PAGEUP:
-            if ( pScroll == &aHScrollLeft ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_LEFT );
-            if ( pScroll == &aHScrollRight ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_RIGHT );
-            if ( pScroll == &aVScrollTop ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_TOP );
-            if ( pScroll == &aVScrollBottom ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_BOTTOM );
+            if ( pScroll == aHScrollLeft.get() ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_LEFT );
+            if ( pScroll == aHScrollRight.get() ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_RIGHT );
+            if ( pScroll == aVScrollTop.get() ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_TOP );
+            if ( pScroll == aVScrollBottom.get() ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_BOTTOM );
             if (nDelta==0) nDelta=-1;
             break;
         case SCROLL_PAGEDOWN:
-            if ( pScroll == &aHScrollLeft ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
-            if ( pScroll == &aHScrollRight ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
-            if ( pScroll == &aVScrollTop ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_TOP );
-            if ( pScroll == &aVScrollBottom ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
+            if ( pScroll == aHScrollLeft.get() ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
+            if ( pScroll == aHScrollRight.get() ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
+            if ( pScroll == aVScrollTop.get() ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_TOP );
+            if ( pScroll == aVScrollBottom.get() ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
             if (nDelta==0) nDelta=1;
             break;
         case SCROLL_DRAG:
@@ -1086,9 +1086,9 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                 //  Bereiche herumzittern
 
                 long nScrollMin = 0;        // RangeMin simulieren
-                if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == &aHScrollRight )
+                if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == aHScrollRight.get() )
                     nScrollMin = aViewData.GetFixPosX();
-                if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
+                if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == aVScrollBottom.get() )
                     nScrollMin = aViewData.GetFixPosY();
 
                 long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
@@ -1116,9 +1116,9 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
     {
         bool bUpdate = ( eType != SCROLL_DRAG );    // bei Drag die Ranges nicht aendern
         if ( bHoriz )
-            ScrollX( nDelta, (pScroll == &aHScrollLeft) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT, bUpdate );
+            ScrollX( nDelta, (pScroll == aHScrollLeft.get()) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT, bUpdate );
         else
-            ScrollY( nDelta, (pScroll == &aVScrollTop) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM, bUpdate );
+            ScrollY( nDelta, (pScroll == aVScrollTop.get()) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM, bUpdate );
     }
 
     return 0;
@@ -1372,7 +1372,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
         RepeatResize();
 
         // auf VCL gibt's Update ohne Ende (jedes Update gilt fuer alle Fenster)
-        //aCornerButton.Update();       // der bekommt sonst nie ein Update
+        //aCornerButton->Update();       // der bekommt sonst nie ein Update
 
         bInUpdateHeader = false;
     }
@@ -1438,11 +1438,11 @@ void ScTabView::UpdateShow()
 
         //  Windows anzeigen
 
-    ShowHide( &aHScrollLeft, bHScrollMode );
-    ShowHide( &aHScrollRight, bShowH && bHScrollMode );
-    ShowHide( &aVScrollBottom, bVScrollMode );
-    ShowHide( &aVScrollTop, bShowV && bVScrollMode );
-    ShowHide( &aScrollBarBox, bVScrollMode || bHScrollMode );
+    ShowHide( aHScrollLeft.get(), bHScrollMode );
+    ShowHide( aHScrollRight.get(), bShowH && bHScrollMode );
+    ShowHide( aVScrollBottom.get(), bVScrollMode );
+    ShowHide( aVScrollTop.get(), bShowV && bVScrollMode );
+    ShowHide( aScrollBarBox.get(), bVScrollMode || bHScrollMode );
 
     ShowHide( pHSplitter, bHScrollMode || bShowH );         // immer angelegt
     ShowHide( pVSplitter, bVScrollMode || bShowV );
@@ -2218,11 +2218,11 @@ void ScTabView::StartDataSelect()
 
 void ScTabView::EnableRefInput(bool bFlag)
 {
-    aHScrollLeft.EnableInput(bFlag);
-    aHScrollRight.EnableInput(bFlag);
-    aVScrollBottom.EnableInput(bFlag);
-    aVScrollTop.EnableInput(bFlag);
-    aScrollBarBox.EnableInput(bFlag);
+    aHScrollLeft->EnableInput(bFlag);
+    aHScrollRight->EnableInput(bFlag);
+    aVScrollBottom->EnableInput(bFlag);
+    aVScrollTop->EnableInput(bFlag);
+    aScrollBarBox->EnableInput(bFlag);
 
     // ab hier dynamisch angelegte
 
