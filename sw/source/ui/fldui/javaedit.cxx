@@ -88,9 +88,15 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
 
 SwJavaEditDialog::~SwJavaEditDialog()
 {
+    dispose();
+}
+
+void SwJavaEditDialog::dispose()
+{
     delete pMgr;
     delete pFileDlg;
     Application::SetDefDialogParent( pOldDefDlgParent );
+    SvxStandardDialog::dispose();
 }
 
 IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, PrevHdl)

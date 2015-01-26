@@ -444,7 +444,13 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
 
 SwScrollNaviPopup::~SwScrollNaviPopup()
 {
+    dispose();
+}
+
+void SwScrollNaviPopup::dispose()
+{
     delete m_pToolBox;
+    SfxPopupWindow::dispose();
 }
 
 void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )

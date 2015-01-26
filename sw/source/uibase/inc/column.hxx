@@ -66,6 +66,7 @@ class SwColumnDlg : public SfxModalDialog
 public:
     SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh);
     virtual ~SwColumnDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     SwWrtShell&     GetWrtShell()   { return rWrtShell; }
 };
@@ -171,6 +172,7 @@ class SwColumnPage : public SfxTabPage
 
 public:
     virtual ~SwColumnPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();

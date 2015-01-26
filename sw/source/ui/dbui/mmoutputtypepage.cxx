@@ -282,6 +282,11 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
 
 SwSendMailDialog::~SwSendMailDialog()
 {
+    dispose();
+}
+
+void SwSendMailDialog::dispose()
+{
     if(m_pImpl->xMailDispatcher.is())
     {
         try
@@ -307,6 +312,7 @@ SwSendMailDialog::~SwSendMailDialog()
     }
     delete m_pStatus;
     delete m_pImpl;
+    ModelessDialog::dispose();
 }
 
 void SwSendMailDialog::AddDocument( SwMailDescriptor& rDesc )

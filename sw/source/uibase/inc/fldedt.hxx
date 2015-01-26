@@ -41,6 +41,7 @@ public:
 
      SwFldEditDlg(SwView& rVw);
     virtual ~SwFldEditDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK(OKHdl, void *);
 

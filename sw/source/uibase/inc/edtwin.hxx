@@ -295,6 +295,7 @@ public:
 
     SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();
+    virtual void dispose() SAL_OVERRIDE;
     virtual void SwitchView();
 };
 
