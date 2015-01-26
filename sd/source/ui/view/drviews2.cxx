@@ -400,7 +400,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     mpDrawView->SdrEndTextEdit();
                 }
-                sal_uInt16 nPage = maTabControl.GetCurPageId() - 1;
+                sal_uInt16 nPage = maTabControl->GetCurPageId() - 1;
                 mpActualPage = GetDoc()->GetSdPage(nPage, mePageKind);
                 ::sd::ViewShell::mpImpl->ProcessModifyPageSlot (
                     rReq,
@@ -437,7 +437,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     mpDrawView->SdrEndTextEdit();
                 }
 
-                sal_uInt16 nPageId = maTabControl.GetCurPageId();
+                sal_uInt16 nPageId = maTabControl->GetCurPageId();
                 SdPage* pCurrentPage = ( GetEditMode() == EM_PAGE )
                     ? GetDoc()->GetSdPage( nPageId - 1, GetPageKind() )
                     : GetDoc()->GetMasterSdPage( nPageId - 1, GetPageKind() );
@@ -483,7 +483,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     mpDrawView->SdrEndTextEdit();
                 }
 
-                maTabControl.StartEditMode( maTabControl.GetCurPageId() );
+                maTabControl->StartEditMode( maTabControl->GetCurPageId() );
             }
 
             Cancel();

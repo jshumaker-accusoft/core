@@ -194,8 +194,14 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
 LayoutMenu::~LayoutMenu (void)
 {
+    dispose();
+}
+
+void LayoutMenu::dispose()
+{
     OSL_TRACE("destroying LayoutMenu at %x", this);
     Dispose();
+    ValueSet::dispose();
 }
 
 void LayoutMenu::Dispose (void)
