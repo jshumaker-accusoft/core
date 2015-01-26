@@ -670,7 +670,13 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()
 {
+    dispose();
+}
+
+void SmElementsDockingWindow::dispose()
+{
     delete mpElementsControl;
+    SfxDockingWindow::dispose();
 }
 
 void SmElementsDockingWindow::ToggleFloatingMode()
