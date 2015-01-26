@@ -153,6 +153,7 @@ namespace rptui
         OViewsWindow(
             OReportWindow* _pReportWindow);
         virtual ~OViewsWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // windows overload
         virtual void Resize() SAL_OVERRIDE;
