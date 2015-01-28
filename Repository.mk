@@ -68,9 +68,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svpclient \
         pixelctl ) \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
-	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest \
-	    outdevgrind) \
-	vcldemo \
 	tiledrendering \
     mtfdemo \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
@@ -151,6 +148,9 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
 	) \
+	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest \
+	    outdevgrind) \
+	vcldemo \
 ))
 
 ifeq ($(OS),WNT)
