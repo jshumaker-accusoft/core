@@ -2182,7 +2182,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     if ( nNumFmtId >= 0 )
     {
         ScPatternAttr aNumPat(rDoc.GetPool());
-        mnScNumFmt = getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId );
+        getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId );
         rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
 

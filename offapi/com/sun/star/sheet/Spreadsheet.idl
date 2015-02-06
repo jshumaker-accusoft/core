@@ -187,6 +187,10 @@ service Spreadsheet
     /** specifies the color of the sheet tab, if any.
      */
     [optional, property] com::sun::star::util::Color TabColor;
+
+    /** specifies all conditional formats of that sheet
+     */
+    [optional, property] com::sun::star::sheet::XConditionalFormats;
 };
 
 
