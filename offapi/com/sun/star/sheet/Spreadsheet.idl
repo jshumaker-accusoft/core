@@ -37,6 +37,7 @@
 #include <com/sun/star/sheet/XSheetLinkable.idl>
 #include <com/sun/star/sheet/Scenario.idl>
 #include <com/sun/star/sheet/XExternalSheetName.idl>
+#include <com/sun/star/sheet/XConditionalFormats.idl>
 #include <com/sun/star/util/Color.idl>
 
 
@@ -190,7 +191,7 @@ service Spreadsheet
 
     /** specifies all conditional formats of that sheet
      */
-    [optional, property] com::sun::star::sheet::XConditionalFormats;
+    [optional, property] com::sun::star::sheet::XConditionalFormats ConditionalFormats;
 };
 
 
