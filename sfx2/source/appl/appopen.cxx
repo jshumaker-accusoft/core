@@ -463,8 +463,8 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         bool bNewWin = false;
         vcl::Window* pTopWin = GetTopWindow();
 
-        SfxTemplateManagerDlg aTemplDlg;
-        int nRet = aTemplDlg.Execute();
+        VclPtr<SfxTemplateManagerDlg> aTemplDlg(new SfxTemplateManagerDlg);
+        int nRet = aTemplDlg->Execute();
         if ( nRet == RET_OK )
         {
             rReq.Done();
@@ -832,11 +832,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 SolarMutexGuard aGuard;
                 vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
 
-                MessageDialog aSecurityWarningBox(pWindow,
+                VclPtr<MessageDialog> aSecurityWarningBox(new MessageDialog(pWindow,
                                                   SfxResId(STR_SECURITY_WARNING_NO_HYPERLINKS),
-                                                  VCL_MESSAGE_WARNING);
-                aSecurityWarningBox.SetText( SfxResId(RID_SECURITY_WARNING_TITLE).toString() );
-                aSecurityWarningBox.Execute();
+                                                  VCL_MESSAGE_WARNING));
+                aSecurityWarningBox->SetText( SfxResId(RID_SECURITY_WARNING_TITLE).toString() );
+                aSecurityWarningBox->Execute();
                 return;
             }
 

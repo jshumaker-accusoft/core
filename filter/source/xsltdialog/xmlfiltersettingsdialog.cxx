@@ -226,11 +226,11 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
-    if ( aDlg.Execute() == RET_OK )
+    VclPtr<XMLFilterTabDialog> aDlg(new XMLFilterTabDialog( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo ) );
+    if ( aDlg->Execute() == RET_OK )
     {
         // insert the new filter
-        insertOrEdit( aDlg.getNewFilterInfo() );
+        insertOrEdit( aDlg->getNewFilterInfo() );
     }
 }
 
@@ -247,10 +247,10 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = (filter_info_impl*)pEntry->GetUserData();
 
         // execute XML Filter Dialog
-        XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
-        if ( aDlg.Execute() == RET_OK )
+        VclPtr<XMLFilterTabDialog> aDlg(new XMLFilterTabDialog( this, *getXSLTDialogResMgr(), mxContext, pOldInfo ) );
+        if ( aDlg->Execute() == RET_OK )
         {
-            filter_info_impl* pNewInfo = aDlg.getNewFilterInfo();
+            filter_info_impl* pNewInfo = aDlg->getNewFilterInfo();
 
             if( !(*pOldInfo == *pNewInfo) )
             {
@@ -772,8 +772,8 @@ void XMLFilterSettingsDialog::onTest()
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
 
-        XMLFilterTestDialog aDlg(this, mxContext);
-        aDlg.test( *pInfo );
+        VclPtr<XMLFilterTestDialog> aDlg(new XMLFilterTestDialog(this, mxContext));
+        aDlg->test( *pInfo );
     }
 }
 
@@ -790,8 +790,8 @@ void XMLFilterSettingsDialog::onDelete()
         OUString aMessage(RESIDSTR(STR_WARN_DELETE));
         aMessage = aMessage.replaceFirst( aPlaceHolder, pInfo->maFilterName );
 
-        WarningBox aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES),    aMessage );
-        if( aWarnBox.Execute() == RET_YES )
+        VclPtr<WarningBox> aWarnBox(new WarningBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES), aMessage ));
+        if( aWarnBox->Execute() == RET_YES )
         {
             try
             {
@@ -920,8 +920,8 @@ void XMLFilterSettingsDialog::onSave()
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
 
-        InfoBox aBox(this, aMsg );
-        aBox.Execute();
+        VclPtr<InfoBox> aBox(new InfoBox(this, aMsg ));
+        aBox->Execute();
     }
 }
 
@@ -986,8 +986,8 @@ void XMLFilterSettingsDialog::onOpen()
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
         }
 
-        InfoBox aBox(this, aMsg );
-        aBox.Execute();
+        VclPtr<InfoBox> aBox(new InfoBox(this, aMsg ));
+        aBox->Execute();
     }
 }
 

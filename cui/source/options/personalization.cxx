@@ -437,11 +437,11 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 {
-    SelectPersonaDialog aDialog( NULL );
+    VclPtr<SelectPersonaDialog> aDialog( new SelectPersonaDialog(NULL) );
 
-    while ( aDialog.Execute() == RET_OK )
+    while ( aDialog->Execute() == RET_OK )
     {
-        OUString aPersonaSetting( aDialog.GetAppliedPersonaSetting() );
+        OUString aPersonaSetting( aDialog->GetAppliedPersonaSetting() );
         if ( !aPersonaSetting.isEmpty() )
         {
             SetPersonaSettings( aPersonaSetting );

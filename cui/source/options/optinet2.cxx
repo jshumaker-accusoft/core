@@ -661,8 +661,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
         }
         else
         {
-            QueryBox aQuery( this, WB_YES_NO|WB_DEF_NO, m_sPasswordStoringDeactivateStr );
-            sal_uInt16 nRet = aQuery.Execute();
+            VclPtr<QueryBox> aQuery(new QueryBox( this, WB_YES_NO|WB_DEF_NO, m_sPasswordStoringDeactivateStr ));
+            sal_uInt16 nRet = aQuery->Execute();
 
             if( RET_YES == nRet )
             {
@@ -758,8 +758,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
 
         if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< task::XInteractionHandler>() ) )
         {
-            svx::WebConnectionInfoDialog aDlg( this );
-            aDlg.Execute();
+            VclPtr<svx::WebConnectionInfoDialog> aDlg( new svx::WebConnectionInfoDialog(this) );
+            aDlg->Execute();
         }
     }
     catch (const Exception&)
@@ -777,8 +777,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
 
     if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
     {
-        MessageDialog aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
-        aWarnBox.Execute();
+        VclPtr<MessageDialog> aWarnBox(new MessageDialog(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO));
+        aWarnBox->Execute();
     }
 
     return 0;

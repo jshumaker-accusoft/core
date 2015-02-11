@@ -312,9 +312,9 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
              // && ! pController->isDirectPrint()
            )
         {
-            MessageDialog aBox(NULL, "ErrorNoPrinterDialog",
-                "vcl/ui/errornoprinterdialog.ui");
-            aBox.Execute();
+            VclPtr<MessageDialog> aBox(new MessageDialog(NULL, "ErrorNoPrinterDialog",
+                "vcl/ui/errornoprinterdialog.ui"));
+            aBox->Execute();
         }
         pController->setValue( OUString( "IsDirect" ),
                                makeAny( false ) );
@@ -461,9 +461,9 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     {
         if( pController->getFilteredPageCount() == 0 )
         {
-            MessageDialog aBox(NULL, "ErrorNoContentDialog",
-                "vcl/ui/errornocontentdialog.ui");
-            aBox.Execute();
+            VclPtr<MessageDialog> aBox(new MessageDialog(NULL, "ErrorNoContentDialog",
+                "vcl/ui/errornocontentdialog.ui"));
+            aBox->Execute();
             return;
         }
     }
@@ -477,13 +477,13 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     {
         try
         {
-            PrintDialog aDlg( NULL, i_pController );
-            if( ! aDlg.Execute() )
+            VclPtr<PrintDialog> aDlg(new PrintDialog( NULL, i_pController ));
+            if( ! aDlg->Execute() )
             {
                 i_pController->abortJob();
                 return;
             }
-            if( aDlg.isPrintToFile() )
+            if( aDlg->isPrintToFile() )
             {
                 OUString aFile = queryFile( pController->getPrinter().get() );
                 if( aFile.isEmpty() )
@@ -494,7 +494,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                 pController->setValue( OUString( "LocalFileName" ),
                                        makeAny( aFile ) );
             }
-            else if( aDlg.isSingleJobs() )
+            else if( aDlg->isSingleJobs() )
             {
                 pController->setValue( OUString( "PrintCollateAsSingleJobs" ),
                                        makeAny( true ) );

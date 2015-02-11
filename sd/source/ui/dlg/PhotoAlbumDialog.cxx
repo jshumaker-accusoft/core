@@ -87,8 +87,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 {
     if (pImagesLst->GetEntryCount() == 0)
     {
-        WarningBox aWarning(this, WB_OK, SD_RESSTR(STR_PHOTO_ALBUM_EMPTY_WARNING));
-        aWarning.Execute();
+        VclPtr<WarningBox> aWarning(new WarningBox(this, WB_OK, SD_RESSTR(STR_PHOTO_ALBUM_EMPTY_WARNING)));
+        aWarning->Execute();
     }
     else
     {
@@ -436,8 +436,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         }
         else
         {
-            InfoBox aInfo(this, OUString("Function is not implemented!"));
-            aInfo.Execute();
+            VclPtr<InfoBox> aInfo(new InfoBox(this, OUString("Function is not implemented!")));
+            aInfo->Execute();
         }
         EndDialog();
         return 0;

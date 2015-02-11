@@ -323,8 +323,8 @@ namespace dbaui
             if (aErrorInfo.isValid())
             {
                 // establishing the connection failed. Show an error window and exit.
-                OSQLMessageBox aMessageBox( GetParentDialog(), aErrorInfo );
-                aMessageBox.Execute();
+                VclPtr<OSQLMessageBox> aMessageBox(new OSQLMessageBox( GetParentDialog(), aErrorInfo ));
+                aMessageBox->Execute();
                 m_pTables->Enable(false);
                 m_pTablesList->Clear();
 
