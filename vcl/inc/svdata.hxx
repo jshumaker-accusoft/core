@@ -306,7 +306,7 @@ struct ImplSVData
     SalData*                mpSalData;
     SalInstance*            mpDefInst;                      // Default SalInstance
     Application*            mpApp;                          // pApp
-    WorkWindow*             mpDefaultWin;                   // Default-Window
+    VclPtr<WorkWindow>      mpDefaultWin;                   // Default-Window
     bool                    mbDeInit;                       // Is VCL deinitializing
     sal_uLong               mnThreadCount;                  // is VCL MultiThread enabled
     ImplConfigData*         mpFirstConfigData;              // Zeiger auf ersten Config-Block

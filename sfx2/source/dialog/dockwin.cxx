@@ -1279,7 +1279,7 @@ SfxDockingWindow::~SfxDockingWindow()
 void SfxDockingWindow::dispose()
 {
     ReleaseChildWindow_Impl();
-    delete pImp;
+    delete pImp; pImp = NULL;
     DockingWindow::dispose();
 }
 

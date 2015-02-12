@@ -445,8 +445,7 @@ void DeInitVCL()
         OpenGLContext* pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
         if( pContext )
             pContext->DeRef();
-        delete pSVData->mpDefaultWin;
-        pSVData->mpDefaultWin = NULL;
+        pSVData->mpDefaultWin.disposeAndClear();
     }
 
     DBGGUI_DEINIT_SOLARMUTEXCHECK();
