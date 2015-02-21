@@ -2302,7 +2302,7 @@ void RtfAttributeOutput::CharBackground(const SvxBrushItem& rBrush)
 {
     if (!rBrush.GetColor().GetTransparency())
     {
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CHCBPAT);
         m_aStyles.append((sal_Int32)m_rExport.GetColor(rBrush.GetColor()));
     }
 }
@@ -2465,6 +2465,15 @@ void RtfAttributeOutput::CharHidden(const SvxCharHiddenItem& rHidden)
 void RtfAttributeOutput::CharBorder(const SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow)
 {
     m_aStyles.append(OutBorderLine(m_rExport, pAllBorder, OOO_STRING_SVTOOLS_RTF_CHBRDR, nDist, bShadow ? SVX_SHADOW_BOTTOMRIGHT : SVX_SHADOW_NONE));
+}
+
+void RtfAttributeOutput::CharHighlight(const SvxBrushItem& rBrush)
+{
+    if (!rBrush.GetColor().GetTransparency())
+    {
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
+        m_aStyles.append((sal_Int32)m_rExport.GetColor(rBrush.GetColor()));
+    }
 }
 
 void RtfAttributeOutput::TextINetFormat(const SwFmtINetFmt& rURL)
