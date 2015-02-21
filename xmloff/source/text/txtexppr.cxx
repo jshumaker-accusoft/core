@@ -658,6 +658,10 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pRepeatOffsetX = NULL;
     XMLPropertyState* pRepeatOffsetY = NULL;
 
+    // character background and highlight
+    XMLPropertyState* pCharBackground = NULL;
+    XMLPropertyState* pCharHighlight = NULL;
+
     bool bNeedsAnchor = false;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -816,6 +820,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
                     propertyState->mnIndex = -1;
             }
             break;
+
+        case CTF_CHAR_BACKGROUND: pCharBackground = propertyState; break;
+        case CTF_CHAR_HIGHLIGHT: pCharHighlight = propertyState; break;
         }
     }
 
@@ -1117,6 +1124,12 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pClipState != NULL && pClip11State != NULL  )
         pClip11State->mnIndex = -1;
+
+    // When both background attributes are available export only the highlight
+    if( pCharHighlight && pCharBackground )
+    {
+       pCharBackground->mnIndex = -1;
+    }
 
     SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
 }
