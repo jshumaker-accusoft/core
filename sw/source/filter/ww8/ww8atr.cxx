@@ -1283,7 +1283,7 @@ void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_
 
 void WW8AttributeOutput::CharHighlight( const SvxBrushItem& rBrush )
 {
-    if( m_rWW8Export.bWrtWW8 )
+    if( m_rWW8Export.bWrtWW8 && rBrush.GetColor() != COL_TRANSPARENT )
     {
         sal_uInt8 nColor = m_rWW8Export.TransCol( rBrush.GetColor() );
         // sprmCHighlight
