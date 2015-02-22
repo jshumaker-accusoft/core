@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <tools/debug.hxx>
+#include <tools/color.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/maptype.hxx>
@@ -1125,10 +1126,15 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     if( pClipState != NULL && pClip11State != NULL  )
         pClip11State->mnIndex = -1;
 
-    // When both background attributes are available export only the highlight
+    // When both background attributes are available export the visible one
     if( pCharHighlight && pCharBackground )
     {
-       pCharBackground->mnIndex = -1;
+        sal_uInt32 nColor = COL_TRANSPARENT;
+        pCharHighlight->maValue >>= nColor;
+        if( nColor == COL_TRANSPARENT )
+            pCharHighlight->mnIndex = -1;
+        else
+            pCharBackground->mnIndex = -1;
     }
 
     SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
