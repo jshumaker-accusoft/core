@@ -76,6 +76,8 @@ TabBar::~TabBar()
 
 void TabBar::dispose()
 {
+    maItems.clear();
+    mpMenuButton.reset();
     vcl::Window::dispose();
 }
 

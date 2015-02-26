@@ -89,6 +89,9 @@ void Deck::dispose()
     // We have to explicitly trigger the destruction of panels.
     // Otherwise that is done by one of our base class destructors
     // without updating maPanels.
+    for (size_t i = 0; i < maPanels.size(); i++)
+        maPanels[i]->dispose();
+
     maPanels.clear();
     vcl::Window::dispose();
 }
@@ -117,6 +120,8 @@ void Deck::Dispose (void)
     mpTitleBar.reset();
     mpFiller.reset();
     mpVerticalScrollBar.reset();
+    mpScrollContainer.reset();
+    mpScrollClipWindow.reset();
 }
 
 
