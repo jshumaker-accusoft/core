@@ -172,7 +172,6 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     aVerSBar.disposeAndClear();
     aHorSBar.disposeAndClear();
     aScrBarBox.disposeAndClear();
-
 }
 
 void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
