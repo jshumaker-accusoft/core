@@ -692,6 +692,11 @@ void ScDataBarFormat::SetDataBarData( ScDataBarFormatData* pData )
     mpFormatData.reset(pData);
 }
 
+ScDataBarFormatData* ScDataBarFormat::GetDataBarData()
+{
+    return mpFormatData.get();
+}
+
 const ScDataBarFormatData* ScDataBarFormat::GetDataBarData() const
 {
     return mpFormatData.get();
@@ -951,6 +956,11 @@ void ScIconSetFormat::SetIconSetData( ScIconSetFormatData* pFormatData )
     mpFormatData.reset( pFormatData );
 }
 
+ScIconSetFormatData* ScIconSetFormat::GetIconSetData()
+{
+    return mpFormatData.get();
+}
+
 const ScIconSetFormatData* ScIconSetFormat::GetIconSetData() const
 {
     return mpFormatData.get();
@@ -1164,6 +1174,12 @@ ScIconSetMap* ScIconSetFormat::getIconSetMap()
 
     return aIconSetMap;
 }
+
+size_t ScIconSetFormat::size() const
+{
+    return mpFormatData->maEntries.size();
+}
+
 
 namespace {
 

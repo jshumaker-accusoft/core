@@ -281,6 +281,7 @@ public:
 
     void SetDataBarData( ScDataBarFormatData* pData );
     const ScDataBarFormatData* GetDataBarData() const;
+    ScDataBarFormatData* GetDataBarData();
 
     virtual void DataChanged(const ScRange& rRange) SAL_OVERRIDE;
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
@@ -328,6 +329,7 @@ public:
 
     void SetIconSetData( ScIconSetFormatData* pData );
     const ScIconSetFormatData* GetIconSetData() const;
+    ScIconSetFormatData* GetIconSetData();
 
     virtual void DataChanged(const ScRange& rRange) SAL_OVERRIDE;
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
@@ -349,6 +351,8 @@ public:
     const_iterator begin() const;
     iterator end();
     const_iterator end() const;
+
+    size_t size() const;
 
 private:
 
