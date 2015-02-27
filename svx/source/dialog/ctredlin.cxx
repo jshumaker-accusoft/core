@@ -141,6 +141,7 @@ SvxRedlinTable::~SvxRedlinTable()
 void SvxRedlinTable::dispose()
 {
     delete pCommentSearcher;
+    pCommentSearcher = NULL;
     SvSimpleTable::dispose();
 }
 
@@ -1095,7 +1096,10 @@ SvxAcceptChgCtr::~SvxAcceptChgCtr()
 void SvxAcceptChgCtr::dispose()
 {
     delete pTPView;
+    pTPView = NULL;
     delete pTPFilter;
+    pTPFilter = NULL;
+    disposeBuilder();
     TabControl::dispose();
 }
 

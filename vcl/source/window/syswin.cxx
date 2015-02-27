@@ -115,6 +115,8 @@ void SystemWindow::dispose()
     delete mpImplData;
     mpImplData = NULL;
 
+    disposeBuilder();
+
     Window::dispose();
 }
 

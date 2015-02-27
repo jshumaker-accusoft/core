@@ -118,6 +118,9 @@ void ImplDockFloatWin::dispose()
 {
     if( mnLastUserEvent )
         Application::RemoveUserEvent( mnLastUserEvent );
+
+    disposeBuilder();
+
     FloatingWindow::dispose();
 }
 
