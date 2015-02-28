@@ -84,7 +84,9 @@ void SidebarToolBox::dispose()
         SetSelectHdl(Link());
         SetActivateHdl(Link());
         SetDeactivateHdl(Link());
+        mbAreHandlersRegistered = false;
     }
+
     ToolBox::dispose();
 }
 
