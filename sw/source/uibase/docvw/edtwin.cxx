@@ -5132,7 +5132,7 @@ void SwEditWin::LoseFocus()
 {
     m_rView.GetWrtShell().InvalidateAccessibleFocus();
     Window::LoseFocus();
-    if( m_pQuickHlpData->m_bIsDisplayed )
+    if( m_pQuickHlpData && m_pQuickHlpData->m_bIsDisplayed )
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
     m_rView.LostFocus();
 }

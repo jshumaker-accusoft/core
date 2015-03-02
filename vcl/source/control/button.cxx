@@ -102,13 +102,11 @@ Button::Button( WindowType nType ) :
 Button::~Button()
 {
     dispose();
+    delete mpButtonData;
 }
 
 void Button::dispose()
 {
-    delete mpButtonData;
-    mpButtonData = NULL;
-
     Control::dispose();
 }
 
@@ -549,7 +547,7 @@ sal_uInt16& Button::ImplGetButtonState()
 
 sal_uInt16 Button::ImplGetButtonState() const
 {
-    return mpButtonData->mnButtonState;
+    return mpButtonData ? mpButtonData->mnButtonState : 0;
 }
 
 void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
@@ -1624,7 +1622,8 @@ void PushButton::SetPressed( bool bPressed )
 void PushButton::EndSelection()
 {
     EndTracking( ENDTRACK_CANCEL );
-    if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )
+    if ( !IsDisposed() &&
+         ImplGetButtonState() & BUTTON_DRAW_PRESSED )
     {
         ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
         if ( !mbPressed )

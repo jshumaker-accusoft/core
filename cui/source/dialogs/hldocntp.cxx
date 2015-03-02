@@ -134,11 +134,15 @@ SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 
 void SvxHyperlinkNewDocTp::dispose()
 {
-    for ( sal_uInt16 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
+    if (m_pLbDocTypes)
     {
-        DocumentTypeData* pTypeData = (DocumentTypeData*)
-                                      m_pLbDocTypes->GetEntryData ( n );
-        delete pTypeData;
+        for ( sal_uInt16 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
+        {
+            DocumentTypeData* pTypeData = (DocumentTypeData*)
+                m_pLbDocTypes->GetEntryData ( n );
+            delete pTypeData;
+        }
+        m_pLbDocTypes = NULL;
     }
     SvxHyperlinkTabPageBase::dispose();
 }

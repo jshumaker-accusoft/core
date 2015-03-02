@@ -1139,17 +1139,18 @@ namespace svx
 
     void HangulHanjaOptionsDialog::dispose()
     {
-        SvTreeListEntry*    pEntry = m_pDictsLB->First();
+        SvTreeListEntry* pEntry = m_pDictsLB->First();
         while( pEntry )
         {
             OUString* pDel = ( OUString* ) pEntry->GetUserData();
-            if( pDel )
-                delete pDel;
+            delete pDel;
+            pEntry->SetUserData( NULL );
             pEntry = m_pDictsLB->Next( pEntry );
         }
 
-        if( m_pCheckButtonData )
-            delete m_pCheckButtonData;
+        delete m_pCheckButtonData;
+        m_pCheckButtonData = NULL;
+
         ModalDialog::dispose();
     }
 
@@ -1785,8 +1786,8 @@ namespace svx
 
     void HangulHanjaEditDictDialog::dispose()
     {
-        if( m_pSuggestions )
-            delete m_pSuggestions;
+        delete m_pSuggestions;
+        m_pSuggestions = NULL;
         ModalDialog::dispose();
     }
 

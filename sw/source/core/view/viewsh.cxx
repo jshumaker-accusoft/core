@@ -2329,7 +2329,7 @@ SwViewShell::CreateAccessiblePreview()
 
 void SwViewShell::InvalidateAccessibleFocus()
 {
-    if( Imp() && Imp()->IsAccessible() )
+    if( this && Imp() && Imp()->IsAccessible() )
         Imp()->GetAccessibleMap().InvalidateFocus();
 }
 

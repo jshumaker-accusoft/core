@@ -620,9 +620,11 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
 void SvxSecurityTabPage::dispose()
 {
     delete mpCertPathDlg;
-
+    mpCertPathDlg = NULL;
     delete mpSecOptions;
+    mpSecOptions = NULL;
     delete mpSecOptDlg;
+    mpSecOptDlg = NULL;
     SfxTabPage::dispose();
 }
 
@@ -1042,6 +1044,7 @@ SvxEMailTabPage::~SvxEMailTabPage()
 void SvxEMailTabPage::dispose()
 {
     delete pImpl;
+    pImpl = NULL;
     SfxTabPage::dispose();
 }
 

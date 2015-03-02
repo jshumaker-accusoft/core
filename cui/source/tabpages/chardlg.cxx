@@ -374,10 +374,9 @@ SvxCharNamePage::~SvxCharNamePage()
 void SvxCharNamePage::dispose()
 {
     delete m_pImpl;
+    m_pImpl = NULL;
     SvxCharBasePage::dispose();
 }
-
-
 
 void SvxCharNamePage::Initialize()
 {

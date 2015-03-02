@@ -369,6 +369,7 @@ ColorFieldControl::~ColorFieldControl()
 void ColorFieldControl::dispose()
 {
     delete mpBitmap;
+    mpBitmap = NULL;
     Control::dispose();
 }
 
@@ -761,6 +762,7 @@ ColorSliderControl::~ColorSliderControl()
 void ColorSliderControl::dispose()
 {
     delete mpBitmap;
+    mpBitmap = NULL;
     Control::dispose();
 }
 

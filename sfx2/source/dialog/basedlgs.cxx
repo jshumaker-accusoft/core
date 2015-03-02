@@ -510,13 +510,12 @@ SfxFloatingWindow::~SfxFloatingWindow()
 
 void SfxFloatingWindow::dispose()
 {
-    if ( pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
+    if ( pImp && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( NULL );
     delete pImp;
+    pImp = NULL;
     FloatingWindow::dispose();
 }
-
-
 
 void SfxFloatingWindow::Resize()
 

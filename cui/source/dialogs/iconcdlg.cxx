@@ -256,18 +256,25 @@ void IconChoiceDialog::dispose()
         }
         delete pData;
     }
+    maPageList.clear();
 
-    // remove Userdata from Icons
-    for ( sal_uLong i=0; i < m_pIconCtrl->GetEntryCount(); i++)
+    if (m_pIconCtrl)
     {
-        SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
-        sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
-        delete pUserData;
+        // remove Userdata from Icons
+        for ( sal_uLong i=0; i < m_pIconCtrl->GetEntryCount(); i++)
+        {
+            SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
+            sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
+            delete pUserData;
+        }
+        m_pIconCtrl = NULL;
     }
 
-
     delete pRanges;
+    pRanges = NULL;
     delete pOutSet;
+    pOutSet = NULL;
+
     ModalDialog::dispose();
 }
 

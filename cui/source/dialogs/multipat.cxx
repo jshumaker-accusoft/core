@@ -237,6 +237,8 @@ void SvxMultiPathDialog::dispose()
     }
 
     delete m_pRadioLB;
+    m_pRadioLB = NULL;
+
     ModalDialog::dispose();
 }
 
@@ -247,9 +249,13 @@ SvxPathSelectDialog::~SvxPathSelectDialog()
 
 void SvxPathSelectDialog::dispose()
 {
-    sal_uInt16 nPos = m_pPathLB->GetEntryCount();
-    while ( nPos-- )
-        delete (OUString*)m_pPathLB->GetEntryData(nPos);
+    if (m_pPathLB)
+    {
+        sal_uInt16 nPos = m_pPathLB->GetEntryCount();
+        while ( nPos-- )
+            delete (OUString*)m_pPathLB->GetEntryData(nPos);
+        m_pPathLB = NULL;
+    }
     ModalDialog::dispose();
 }
 

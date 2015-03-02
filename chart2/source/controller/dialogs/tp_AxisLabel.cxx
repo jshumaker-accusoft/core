@@ -80,6 +80,7 @@ SchAxisLabelTabPage::~SchAxisLabelTabPage()
 void SchAxisLabelTabPage::dispose()
 {
     delete m_pOrientHlp;
+    m_pOrientHlp = NULL;
     SfxTabPage::dispose();
 }
 

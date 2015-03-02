@@ -675,8 +675,11 @@ OfaViewTabPage::~OfaViewTabPage()
 void OfaViewTabPage::dispose()
 {
     delete mpDrawinglayerOpt;
+    mpDrawinglayerOpt = NULL;
     delete pCanvasSettings;
+    pCanvasSettings = NULL;
     delete pAppearanceCfg;
+    pAppearanceCfg = NULL;
     SfxTabPage::dispose();
 }
 
@@ -1199,6 +1202,7 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
 void OfaLanguagesTabPage::dispose()
 {
     delete pLangConfig;
+    pLangConfig = NULL;
     SfxTabPage::dispose();
 }
 

@@ -1134,12 +1134,10 @@ SvxLinguTabPage::~SvxLinguTabPage()
 
 void SvxLinguTabPage::dispose()
 {
-    if (pLinguData)
-        delete pLinguData;
+    delete pLinguData;
+    pLinguData = NULL;
     SfxTabPage::dispose();
 }
-
-
 
 // don't throw away overloaded
 const sal_uInt16* SvxLinguTabPage::GetRanges()
@@ -1147,8 +1145,6 @@ const sal_uInt16* SvxLinguTabPage::GetRanges()
     //TL???
     return pRanges;
 }
-
-
 
 SfxTabPage* SvxLinguTabPage::Create( vcl::Window* pParent,
                                      const SfxItemSet* rAttrSet )
@@ -1922,9 +1918,9 @@ SvxEditModulesDlg::~SvxEditModulesDlg()
 void SvxEditModulesDlg::dispose()
 {
     delete pDefaultLinguData;
+    pDefaultLinguData = NULL;
     ModalDialog::dispose();
 }
-
 
 SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {
